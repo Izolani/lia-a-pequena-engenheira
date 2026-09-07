@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lia — A Pequena Engenheira</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:linear-gradient(180deg,#dff4ff,#f7fbff);color:#17324d}
+button{font:inherit;border:0;cursor:pointer}.app{min-height:100vh}
+.top{padding:16px 22px;display:flex;justify-content:space-between;align-items:center;background:#fff8;border-bottom:1px solid #cce5f5;backdrop-filter:blur(8px)}
+.logo{font-weight:900;font-size:clamp(20px,4vw,32px);color:#ed4b9b}.logo span{color:#2574d8}.stats{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}.pill{background:#fff;border:2px solid #d9eaf7;border-radius:999px;padding:8px 13px;font-weight:800}
+main{max-width:1180px;margin:auto;padding:24px}.screen{display:none}.screen.active{display:block}.hero{background:linear-gradient(135deg,#ffffff,#eef9ff);border:3px solid #d7ecfa;border-radius:30px;padding:35px;display:grid;grid-template-columns:1.2fr .8fr;gap:25px;box-shadow:0 15px 40px #5c91b022}
+h1{font-size:clamp(36px,7vw,72px);margin:0 0 8px;line-height:.95}.subtitle{font-size:20px;color:#46667d}.cta{background:linear-gradient(135deg,#20b86b,#0d9a58);color:white;padding:15px 28px;border-radius:18px;font-size:20px;font-weight:900;box-shadow:0 7px 0 #087642;margin-top:18px}.secondary{background:#fff;color:#2574d8;border:2px solid #b9dbf3;padding:12px 20px;border-radius:16px;font-weight:900;margin:10px 6px 0 0}
+.lia{min-height:310px;border-radius:28px;background:linear-gradient(#bcecff,#e8fbff);display:flex;align-items:end;justify-content:center;overflow:hidden;position:relative}.sun{position:absolute;width:90px;height:90px;border-radius:50%;background:#ffd65c;top:25px;right:30px}.character{font-size:145px;filter:drop-shadow(0 10px 6px #2345  );z-index:2}.bubble{position:absolute;top:25px;left:20px;background:white;border:3px solid #a8d7ee;border-radius:18px;padding:10px 15px;font-weight:800;z-index:3}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:15px;margin:8px 0 18px}h2{font-size:32px;margin:0}
+.worlds{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px}.world{background:#fff;border:3px solid #d7eaf7;border-radius:24px;padding:18px;min-height:155px;box-shadow:0 7px 18px #3d6c8b14}.world.lock{opacity:.55}.world .ico{font-size:42px}.world h3{margin:5px 0}.stars{color:#e8a600;font-weight:900}
+.missions{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}.mission{background:#fff;border:3px solid #d7eaf7;border-radius:22px;padding:18px}.mission.done{border-color:#52c98a}.mission button{width:100%;margin-top:12px;padding:11px;border-radius:13px;background:#2574d8;color:#fff;font-weight:900}
+.game{background:#fff;border:3px solid #d7eaf7;border-radius:28px;padding:22px}.gamegrid{display:grid;grid-template-columns:1fr 330px;gap:18px}.board{min-height:450px;border-radius:22px;background:linear-gradient(#a9ddf8 0 60%,#75c8ee 60%);position:relative;overflow:hidden;border:3px solid #aad9ed}.river{position:absolute;left:0;right:0;top:58%;height:42%;background:repeating-linear-gradient(165deg,#5dbbe8 0 18px,#80d0f0 18px 34px)}.bank{position:absolute;left:0;right:0;top:51%;height:15px;background:#7f9b61}.bridge-area{position:absolute;left:10%;right:10%;top:42%;height:18%;border-bottom:14px solid #765234}.piece{position:absolute;width:58px;height:20px;border-radius:5px;background:#c8894b;border:3px solid #8b5a2d;cursor:pointer;box-shadow:0 4px 0 #0002}.piece.block{background:#e94f45;border-color:#b93430;height:35px}.piece.bar{background:#777;border-color:#555}.piece.cable{height:8px;border-radius:999px;background:#8c5a34}.toolbox{background:#f5fbff;border:2px solid #d2e8f5;border-radius:20px;padding:15px}.tools{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.tool{background:#fff;border:2px solid #cfe5f2;border-radius:14px;padding:12px;text-align:center;font-weight:800}.tool b{display:block;font-size:25px}.test{width:100%;padding:15px;border-radius:15px;background:#f29d19;color:white;font-weight:900;font-size:18px;margin-top:12px}.result{margin-top:14px;padding:14px;border-radius:15px;background:#effaf4;border:2px solid #9be0ba;display:none}.result.show{display:block}.meter{height:9px;background:#dcecf5;border-radius:99px;overflow:hidden}.meter i{display:block;height:100%;background:#26aa68;width:0}.lab{display:grid;grid-template-columns:1fr 300px;gap:18px}.labcanvas{min-height:440px;border:3px dashed #a9d8ee;border-radius:22px;background:linear-gradient(#effaff,#fff);position:relative;overflow:hidden}.labitem{position:absolute;cursor:move;font-size:45px;user-select:none}.hint{background:#fff5c9;border:2px solid #f1d56a;border-radius:16px;padding:13px;margin-top:12px}
+.back{background:#fff;border:2px solid #cde4f3;padding:9px 15px;border-radius:13px;font-weight:800}
+@media(max-width:800px){.hero,.gamegrid,.lab{grid-template-columns:1fr}.top{align-items:flex-start}.stats{max-width:50%}.lia{min-height:230px}.character{font-size:105px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+  <div class="logo">🔧 LIA <span>— A PEQUENA ENGENHEIRA</span></div>
+  <div class="stats"><div class="pill">⭐ <span id="stars">0</span></div><div class="pill">🔩 <span id="bolts">0</span></div><div class="pill">🏆 Nível <span id="level">1</span></div></div>
+</header>
+<main>
+<section id="home" class="screen active">
+  <div class="hero">
+    <div><div class="bubble" style="position:relative;display:inline-block;top:auto;left:auto">Grandes sonhos também se constroem com pequenas peças! 💚</div>
+    <h1>Lia<br><span style="color:#2574d8">A Pequena Engenheira</span></h1>
+    <p class="subtitle">Imagine. Monte. Teste. Descubra!</p>
+    <button class="cta" onclick="show('map')">▶ Jogar</button><br>
+    <button class="secondary" onclick="show('lab')">🧪 Laboratório</button><button class="secondary" onclick="show('ach')">🏅 Conquistas</button>
+    </div>
+    <div class="lia"><div class="sun"></div><div class="bubble">Oi! Eu sou a Lia! 👷‍♀️</div><div class="character">👧🏻</div></div>
+  </div>
+</section>
+
+<section id="map" class="screen">
+ <div class="section-title"><h2>🗺️ Mundos da Engenharia</h2><button class="back" onclick="show('home')">← Início</button></div>
+ <div class="worlds" id="worlds"></div>
+ <div style="margin-top:25px"><h2>🎯 Missões</h2><div class="missions" id="missions"></div></div>
+</section>
+
+<section id="bridge" class="screen">
+ <div class="section-title"><h2>🌉 Missão 1 — A Ponte da Lia</h2><button class="back" onclick="show('map')">← Mapa</button></div>
+ <div class="gamegrid"><div class="board" id="board"><div class="river"></div><div class="bank"></div><div class="bridge-area"></div></div>
+ <aside class="toolbox"><h3>🧰 Escolha as peças</h3><p>Toque numa peça para colocá-la. Monte uma ponte forte!</p><div class="tools">
+ <button class="tool" onclick="addPiece('wood')"><b>🪵</b>Madeira</button><button class="tool" onclick="addPiece('block')"><b>🧱</b>Bloco</button><button class="tool" onclick="addPiece('bar')"><b>📏</b>Barra</button><button class="tool" onclick="addPiece('cable')"><b>🪢</b>Cabo</button></div>
+ <button class="test" onclick="testBridge()">🚚 TESTAR A PONTE</button><div id="bridgeResult" class="result"></div><div class="hint">💡 Dica: use barras e peças cruzadas para dar mais estabilidade.</div></aside></div>
+</section>
+
+<section id="tower" class="screen">
+ <div class="section-title"><h2>🏢 Missão 2 — Torre Equilibrada</h2><button class="back" onclick="show('map')">← Mapa</button></div>
+ <div class="gamegrid"><div class="board" id="towerBoard" style="background:linear-gradient(#bfeaff 0 75%,#8bb76c 75%)"><div id="towerStack" style="position:absolute;bottom:25%;left:42%;width:16%;display:flex;flex-direction:column-reverse;align-items:center"></div></div>
+ <aside class="toolbox"><h3>🧱 Construa uma torre</h3><p>Adicione blocos. Tente chegar a 6 peças sem deixar a torre cair.</p>
+ <button class="test" style="background:#2574d8" onclick="addTower()">➕ Adicionar bloco</button><button class="test" onclick="testTower()">🏗️ TESTAR TORRE</button><div id="towerResult" class="result"></div></aside></div>
+</section>
+
+<section id="machine" class="screen">
+ <div class="section-title"><h2>⚙️ Missão 3 — A Máquina de Engrenagens</h2><button class="back" onclick="show('map')">← Mapa</button></div>
+ <div class="gamegrid"><div class="board" style="background:linear-gradient(#e9f7ff,#d7edf8)"><div id="gears" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:4px;font-size:95px">⚙️ ⚙️ ⚙️</div></div>
+ <aside class="toolbox"><h3>🔧 Faça a máquina funcionar</h3><p>As engrenagens precisam formar uma sequência. Escolha a ordem correta.</p>
+ <div class="tools"><button class="tool" onclick="chooseGear('A')"><b>⚙️</b>A</button><button class="tool" onclick="chooseGear('B')"><b>🔩</b>B</button><button class="tool" onclick="chooseGear('C')"><b>⚙️</b>C</button></div>
+ <button class="test" onclick="testMachine()">▶️ LIGAR MÁQUINA</button><div id="machineResult" class="result"></div></aside></div>
+</section>
+
+<section id="energy" class="screen">
+ <div class="section-title"><h2>⚡ Missão 4 — Energia para a Cidade</h2><button class="back" onclick="show('map')">← Mapa</button></div>
+ <div class="gamegrid"><div class="board" style="background:linear-gradient(#b8e6ff,#eafff0)"><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:space-around;font-size:80px">☀️ ➡️ 💡</div></div>
+ <aside class="toolbox"><h3>🌞 Escolha a fonte</h3><p>Qual fonte é renovável e pode ajudar a cidade?</p>
+ <button class="test" style="background:#f0a51c" onclick="energyChoice('solar')">☀️ Energia solar</button><button class="test" style="background:#2574d8" onclick="energyChoice('coal')">🪨 Carvão</button><div id="energyResult" class="result"></div></aside></div>
+</section>
+
+<section id="water" class="screen">
+ <div class="section-title"><h2>💧 Missão 5 — Salve o Rio</h2><button class="back" onclick="show('map')">← Mapa</button></div>
+ <div class="gamegrid"><div class="board" style="background:linear-gradient(#aee5ff,#69c5e9)"><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:120px">💧🌱💧</div></div>
+ <aside class="toolbox"><h3>🌱 Escolha uma solução</h3><p>Como podemos ajudar a água do rio?</p>
+ <button class="test" style="background:#20a968" onclick="waterChoice('treat')">🧪 Tratar a água</button><button class="test" style="background:#9c6a3e" onclick="waterChoice('trash')">🗑️ Jogar mais lixo</button><div id="waterResult" class="result"></div></aside></div>
+</section>
+
+<section id="lab" class="screen">
+ <div class="section-title"><h2>🧪 Laboratório de Engenharia</h2><button class="back" onclick="show('home')">← Início</button></div>
+ <div class="lab"><div class="labcanvas" id="labcanvas"></div><aside class="toolbox"><h3>✨ Crie livremente!</h3><p>Escolha uma criação e depois arraste as peças pela bancada.</p>
+ <div class="tools"><button class="tool" onclick="labAdd('🏠')"><b>🏠</b>Casa</button><button class="tool" onclick="labAdd('🚗')"><b>🚗</b>Carro</button><button class="tool" onclick="labAdd('🚀')"><b>🚀</b>Foguete</button><button class="tool" onclick="labAdd('⚙️')"><b>⚙️</b>Máquina</button><button class="tool" onclick="labAdd('🌬️')"><b>🌬️</b>Turbina</button><button class="tool" onclick="labAdd('💧')"><b>💧</b>Água</button></div>
+ <button class="test" onclick="testLab()">▶️ TESTAR CRIAÇÃO</button><div id="labResult" class="result"></div></aside></div>
+</section>
+
+<section id="ach" class="screen">
+ <div class="section-title"><h2>🏅 Conquistas da Lia</h2><button class="back" onclick="show('home')">← Início</button></div>
+ <div class="worlds" id="achievements"></div>
+</section>
+</main>
+</div>
+<script>
+const state=JSON.parse(localStorage.getItem('liaGame')||'{"stars":0,"bolts":0,"done":[],"level":1}');
+const worlds=[['🏠','Construções',0],['🌉','Pontes',1],['⚙️','Máquinas',1],['⚡','Energia',1],['💧','Água',1],['🚗','Transportes',1],['🌱','Meio Ambiente',1],['🏙️','Cidade Inteligente',1],['🚀','Espaço',1],['💡','Grandes Inventos',1]];
+const missions=[['bridge','🌉','A Ponte da Lia','Pontes'],['tower','🏢','Torre Equilibrada','Construções'],['machine','⚙️','Máquina de Engrenagens','Máquinas'],['energy','⚡','Energia para a Cidade','Energia'],['water','💧','Salve o Rio','Água']];
+function save(){localStorage.setItem('liaGame',JSON.stringify(state));document.getElementById('stars').textContent=state.stars;document.getElementById('bolts').textContent=state.bolts;state.level=Math.min(10,1+Math.floor(state.stars/5));document.getElementById('level').textContent=state.level}
+function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');if(id==='map')renderMap();if(id==='ach')renderAch();window.scrollTo({top:0,behavior:'smooth'})}
+function renderMap(){document.getElementById('worlds').innerHTML=worlds.map((w,i)=>`<div class="world ${w[2]?'lock':''}"><div class="ico">${w[0]}</div><h3>${w[1]}</h3>${i<3?'<div class="stars">★ Mundo aberto</div>':'<div>🔒 Em breve</div>'}</div>`).join('');document.getElementById('missions').innerHTML=missions.map((m,i)=>{let d=state.done.includes(m[0]);return `<div class="mission ${d?'done':''}"><div style="font-size:40px">${m[1]}</div><h3>${m[2]}</h3><small>${m[3]}</small>${d?'<p>✅ Concluída!</p>':`<button onclick="show('${m[0]}')">Começar missão</button>`}</div>`}).join('')}
+function reward(id){if(!state.done.includes(id)){state.done.push(id);state.stars+=2;state.bolts+=10;save();}renderMap()}
+function addPiece(type){const b=document.getElementById('board');let p=document.createElement('div');p.className='piece '+(type==='block'?'block':type==='bar'?'bar':type==='cable'?'cable':'');p.style.left=(15+Math.random()*65)+'%';p.style.top=(30+Math.random()*25)+'%';p.title='Peça';p.onclick=()=>p.remove();b.appendChild(p)}
+function testBridge(){let n=document.querySelectorAll('#board .piece').length;let good=n>=6;let r=document.getElementById('bridgeResult');r.classList.add('show');r.innerHTML=good?'<b>🎉 Funcionou!</b><br>A ponte suportou o caminhão!<br>⭐ Resistência 9/10 · Estabilidade 8/10<br>🔩 +10 Parafusos de Ouro':'<b>💡 Vamos tentar de novo!</b><br>A ponte precisa de mais peças para ficar estável. Tente usar pelo menos 6 peças.';if(good)reward('bridge')}
+let tower=0;function addTower(){if(tower<8){tower++;let d=document.createElement('div');d.style.cssText='width:70px;height:45px;background:#e95a48;border:3px solid #b83931;border-radius:6px;margin:2px';d.textContent='🧱';d.style.fontSize='25px';d.style.textAlign='center';document.getElementById('towerStack').appendChild(d)}}function testTower(){let r=document.getElementById('towerResult');r.classList.add('show');if(tower>=6){r.innerHTML='<b>🏆 Torre aprovada!</b><br>Você alcançou 6 blocos com equilíbrio. Muito bem, engenheira!';reward('tower')}else r.innerHTML='<b>🧠 Ainda falta um pouco!</b><br>Adicione pelo menos 6 blocos e teste novamente.'}
+let gear=[];function chooseGear(x){gear.push(x);document.getElementById('gears').textContent=gear.join(' → ')||'⚙️ ⚙️ ⚙️'}function testMachine(){let r=document.getElementById('machineResult');r.classList.add('show');if(gear.join('')==='ABC'){r.innerHTML='<b>⚙️ Máquina funcionando!</b><br>Você encontrou a sequência correta.';reward('machine')}else r.innerHTML='<b>🔧 Quase!</b><br>Tente a sequência A → B → C.'}
+function energyChoice(x){let r=document.getElementById('energyResult');r.classList.add('show');if(x==='solar'){r.innerHTML='<b>☀️ Excelente escolha!</b><br>A energia solar é renovável. A cidade agradece!';reward('energy')}else r.innerHTML='<b>💡 Pense de novo!</b><br>Procure uma fonte que possa se renovar naturalmente.'}
+function waterChoice(x){let r=document.getElementById('waterResult');r.classList.add('show');if(x==='treat'){r.innerHTML='<b>💧 Muito bem!</b><br>Tratar a água ajuda a proteger pessoas, animais e natureza.';reward('water')}else r.innerHTML='<b>🌱 Vamos cuidar do rio!</b><br>O lixo deve ser recolhido e a água tratada.'}
+function renderAch(){let a=[['🏠','Primeira Construção','bridge'],['🌉','Pontes Incríveis','bridge'],['⚙️','Primeira Máquina','machine'],['💡','Energia Inteligente','energy'],['🌱','Amiga dos Rios','water'],['🚀','Engenheira do Futuro','all']];document.getElementById('achievements').innerHTML=a.map(x=>`<div class="world ${x[2]==='all'?(state.done.length<5?'lock':''):(!state.done.includes(x[2])?'lock':'')}"><div class="ico">${x[0]}</div><h3>${x[1]}</h3><div>${x[2]==='all'?(state.done.length>=5?'🏆 Desbloqueada!':'🔒 Complete as 5 missões'):state.done.includes(x[2])?'🏆 Conquistada!':'🔒 Ainda bloqueada'}</div></div>`).join('')}
+function labAdd(e){let d=document.createElement('div');d.className='labitem';d.textContent=e;d.style.left=(10+Math.random()*75)+'%';d.style.top=(10+Math.random()*70)+'%';d.onpointerdown=function(ev){d.setPointerCapture(ev.pointerId);let sx=ev.clientX,sy=ev.clientY,ox=d.offsetLeft,oy=d.offsetTop;d.onpointermove=q=>{d.style.left=ox+q.clientX-sx+'px';d.style.top=oy+q.clientY-sy+'px'};d.onpointerup=()=>d.onpointermove=null};document.getElementById('labcanvas').appendChild(d)}
+function testLab(){let n=document.querySelectorAll('#labcanvas .labitem').length,r=document.getElementById('labResult');r.classList.add('show');if(n>=3){r.innerHTML='<b>🎉 Sua invenção está pronta para o teste!</b><br>Você mostrou muita criatividade, Lia!';state.stars++;state.bolts+=5;save()}else r.innerHTML='<b>💡 Continue criando!</b><br>Coloque pelo menos 3 elementos na bancada.'}
+save();renderMap();
+</script>
+</body></html>
