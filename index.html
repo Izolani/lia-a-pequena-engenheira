@@ -1,0 +1,2564 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lia — A Pequena Engenheira (v3 visual ilustrado)</title>
+  
+  <!-- Basecoat CSS + Sistema Shell -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basecoat-css@1.0.2/dist/basecoat.cdn.min.css">
+  <link rel="stylesheet" href="shell.css">
+  <script src="shell.js" defer></script>
+
+  <style>
+    :root {
+      --accent: #ff9f1c;
+      --accent-contrast: #ffffff;
+      --sky-1: #9ed4f7;
+      --sky-2: #dff4ff;
+      --sky-3: #eaf9ff;
+      --grass-1: #4caf50;
+      --grass-2: #8bc34a;
+      --sunny: #ffd166;
+      --orange-btn: #ff9f1c;
+      --orange-shadow: #c66f00;
+      --green-btn: #35d07f;
+      --green-shadow: #18864b;
+      --blue-btn: #3a8ef0;
+      --blue-shadow: #1958af;
+      --purple-btn: #9d4edd;
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --font-rounded: system-ui, -apple-system, "Segoe UI", Roboto, "Comic Sans MS", "Chalkboard SE", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-rounded);
+      background: linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 40%, var(--sky-3) 100%);
+      color: #1e293b;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Cenário de Fundo Animado (Nuvens e Sol) */
+    .sky-scenery {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .sun-badge {
+      position: absolute;
+      top: 16px;
+      right: 24px;
+      font-size: 3.5rem;
+      filter: drop-shadow(0 0 16px rgba(255, 209, 102, 0.8));
+      animation: pulseSun 4s ease-in-out infinite alternate;
+    }
+
+    .cloud {
+      position: absolute;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 3rem;
+      user-select: none;
+      animation: floatCloud linear infinite;
+    }
+    .cloud-1 { top: 60px; left: -100px; animation-duration: 38s; }
+    .cloud-2 { top: 140px; left: -120px; animation-duration: 48s; animation-delay: 12s; font-size: 2.2rem; }
+    .cloud-3 { top: 220px; left: -90px; animation-duration: 55s; animation-delay: 20s; font-size: 4rem; opacity: 0.6; }
+
+    @keyframes floatCloud {
+      0% { transform: translateX(-150px); }
+      100% { transform: translateX(calc(100vw + 200px)); }
+    }
+    @keyframes pulseSun {
+      0% { transform: scale(1) rotate(0deg); }
+      100% { transform: scale(1.1) rotate(12deg); }
+    }
+
+    /* Botões Cartoon com Efeito 3D Adesivo */
+    .cartoon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 48px;
+      padding: 12px 24px;
+      border-radius: 24px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      text-decoration: none;
+      border: 3px solid #ffffff;
+      cursor: pointer;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.15s ease;
+      user-select: none;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    }
+    .cartoon-btn:active {
+      transform: translateY(4px);
+    }
+    .cartoon-btn:focus-visible {
+      outline: 4px solid #ffd166;
+      outline-offset: 2px;
+    }
+
+    .btn-green {
+      background: linear-gradient(180deg, var(--green-btn), #18a05a);
+      color: #ffffff;
+      box-shadow: 0 6px 0 var(--green-shadow), 0 10px 18px rgba(24, 160, 90, 0.35);
+    }
+    .btn-green:active {
+      box-shadow: 0 2px 0 var(--green-shadow);
+    }
+
+    .btn-orange {
+      background: linear-gradient(180deg, #ffb340, var(--orange-btn));
+      color: #ffffff;
+      box-shadow: 0 6px 0 var(--orange-shadow), 0 10px 18px rgba(255, 159, 28, 0.35);
+    }
+    .btn-orange:active {
+      box-shadow: 0 2px 0 var(--orange-shadow);
+    }
+
+    .btn-blue {
+      background: linear-gradient(180deg, #4ea3ff, var(--blue-btn));
+      color: #ffffff;
+      box-shadow: 0 6px 0 var(--blue-shadow), 0 10px 18px rgba(58, 142, 240, 0.35);
+    }
+    .btn-blue:active {
+      box-shadow: 0 2px 0 var(--blue-shadow);
+    }
+
+    .btn-purple {
+      background: linear-gradient(180deg, #b366ff, var(--purple-btn));
+      color: #ffffff;
+      box-shadow: 0 6px 0 #6e27a6, 0 10px 18px rgba(157, 78, 221, 0.35);
+    }
+    .btn-purple:active {
+      box-shadow: 0 2px 0 #6e27a6);
+    }
+
+    .btn-circle {
+      width: 48px;
+      height: 48px;
+      min-height: 48px;
+      padding: 0;
+      border-radius: 50%;
+      background: #ffffff;
+      color: #1e293b;
+      border: 3px solid #7cc4f2;
+      box-shadow: 0 5px 0 #5ba3d4, 0 8px 14px rgba(0, 0, 0, 0.1);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      cursor: pointer;
+    }
+    .btn-circle:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #5ba3d4;
+    }
+
+    /* Cards Translúcidos Estilo Adesivo */
+    .cartoon-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(8px);
+      border: 3.5px solid #ffffff;
+      border-radius: 26px;
+      box-shadow: 0 8px 0 rgba(0, 0, 0, 0.07), 0 14px 28px rgba(50, 100, 180, 0.12);
+      padding: 24px;
+      position: relative;
+    }
+
+    /* Cabeçalho Fixo do Jogo */
+    .game-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 3.5px solid #ffffff;
+      box-shadow: 0 6px 18px rgba(50, 100, 180, 0.1);
+      padding: 10px 16px;
+    }
+    .header-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .logo-title {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #0f4c81;
+      letter-spacing: -0.3px;
+    }
+    .stats-pills {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .stat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 900;
+      font-size: 0.92rem;
+      border: 2px solid #ffffff;
+      box-shadow: 0 3px 0 rgba(0, 0, 0, 0.08);
+      background: #ffffff;
+    }
+    .pill-stars { background: linear-gradient(180deg, #fff9db, #ffe066); color: #855300; }
+    .pill-screws { background: linear-gradient(180deg, #e9ecef, #ced4da); color: #343a40; }
+    .pill-level { background: linear-gradient(180deg, #d3f9d8, #b2f2bb); color: #1e6b36; }
+
+    .level-bar-box {
+      width: 100%;
+      max-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .level-bar-label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #3b5998;
+      display: flex;
+      justify-content: space-between;
+    }
+    .level-bar-track {
+      width: 100%;
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1.5px solid #ffffff;
+    }
+    .level-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4caf50, #ffd166, #ff9f1c);
+      border-radius: 8px;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    /* Container Principal */
+    .game-main {
+      position: relative;
+      z-index: 10;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 24px 16px 80px;
+    }
+
+    /* Lia Ilustrada (SVG / CSS Cartoon) */
+    .lia-avatar-box {
+      display: inline-block;
+      position: relative;
+      user-select: none;
+    }
+    .lia-svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 8px 12px rgba(30, 80, 150, 0.2));
+    }
+    .lia-speech {
+      background: #ffffff;
+      border: 3px solid #ff9f1c;
+      border-radius: 20px;
+      padding: 12px 18px;
+      font-weight: 800;
+      color: #1e293b;
+      position: relative;
+      box-shadow: 0 6px 0 rgba(0, 0, 0, 0.07);
+      max-width: 320px;
+      font-size: 1rem;
+      line-height: 1.35;
+    }
+    .lia-speech::after {
+      content: "";
+      position: absolute;
+      bottom: -12px;
+      left: 28px;
+      border-width: 12px 12px 0;
+      border-style: solid;
+      border-color: #ff9f1c transparent transparent;
+      display: block;
+      width: 0;
+    }
+
+    /* Vistas / Telas */
+    .view-screen {
+      display: none;
+      animation: popIn 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+    }
+    .view-screen.active {
+      display: block;
+    }
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.96) translateY(8px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* HERO NA HOME */
+    .hero-panel {
+      text-align: center;
+      padding: 40px 20px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      position: relative;
+    }
+    .hero-title {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900;
+      color: #0d47a1;
+      text-shadow: 0 3px 0 #ffffff, 0 6px 12px rgba(13, 71, 161, 0.2);
+      margin: 0;
+      line-height: 1.15;
+    }
+    .hero-subtitle {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #2b6cb0;
+      margin: 0;
+    }
+    .hero-lia-zone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin: 10px 0;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    /* MAPA DE MUNDOS */
+    .map-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .map-title {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #0b4f8a;
+      margin: 0;
+    }
+    .worlds-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .world-card {
+      background: #ffffff;
+      border: 3.5px solid #bfe3f7;
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 6px 0 rgba(0, 0, 0, 0.06), 0 10px 20px rgba(50, 100, 180, 0.1);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+    .world-card:hover {
+      transform: translateY(-4px);
+      border-color: #ff9f1c;
+    }
+    .world-card.locked {
+      opacity: 0.72;
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+    .world-icon-badge {
+      font-size: 2.8rem;
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 18px;
+      background: #f0f9ff;
+      border: 2px solid #e0f2fe;
+      margin-bottom: 12px;
+    }
+    .world-tag-new {
+      position: absolute;
+      top: -12px;
+      right: 16px;
+      background: linear-gradient(180deg, #ffd166, #ff9f1c);
+      color: #633200;
+      font-size: 0.82rem;
+      font-weight: 900;
+      padding: 4px 12px;
+      border-radius: 16px;
+      border: 2px solid #ffffff;
+      box-shadow: 0 3px 0 rgba(0, 0, 0, 0.12);
+      animation: bounceNew 2s infinite ease-in-out;
+    }
+    @keyframes bounceNew {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+    .world-title {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #1e3a8a;
+      margin: 0 0 6px;
+    }
+    .world-desc {
+      font-size: 0.92rem;
+      color: #475569;
+      margin: 0 0 16px;
+      line-height: 1.35;
+    }
+
+    /* TELA DE MISSÃO */
+    .mission-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .mission-title-box {
+      flex: 1;
+    }
+    .mission-title {
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: #0b4f8a;
+      margin: 0;
+    }
+    .mission-helper {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      background: #ffffff;
+      padding: 16px 20px;
+      border-radius: 20px;
+      border: 3px solid #ffbe0b;
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    /* MISSÃO 1 - PONTE */
+    .bridge-board {
+      background: linear-gradient(180deg, #70c4ff 0%, #a8e0ff 65%, #38a169 65%, #276749 100%);
+      border-radius: 20px;
+      height: 220px;
+      position: relative;
+      border: 3px solid #ffffff;
+      overflow: hidden;
+      margin-bottom: 16px;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+    .shore-left {
+      position: absolute;
+      left: 0;
+      top: 130px;
+      width: 75px;
+      height: 90px;
+      background: #2f855a;
+      border-right: 4px solid #22543d;
+      z-index: 2;
+    }
+    .shore-right {
+      position: absolute;
+      right: 0;
+      top: 130px;
+      width: 75px;
+      height: 90px;
+      background: #2f855a;
+      border-left: 4px solid #22543d;
+      z-index: 2;
+    }
+    .river-stream {
+      position: absolute;
+      left: 75px;
+      right: 75px;
+      top: 140px;
+      height: 80px;
+      background: linear-gradient(180deg, #3182ce, #2b6cb0);
+      overflow: hidden;
+    }
+    .river-wave {
+      position: absolute;
+      width: 200%;
+      height: 100%;
+      background: repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255, 255, 255, 0.18) 15px, rgba(255, 255, 255, 0.18) 30px);
+      animation: riverFlow 6s linear infinite;
+    }
+    @keyframes riverFlow {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .bridge-deck {
+      position: absolute;
+      left: 70px;
+      right: 70px;
+      top: 122px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      z-index: 5;
+    }
+    .bridge-piece {
+      height: 22px;
+      border-radius: 4px;
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #fff;
+      animation: popPiece 0.2s ease;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    @keyframes popPiece {
+      0% { transform: scale(0.6); }
+      100% { transform: scale(1); }
+    }
+    .piece-wood { background: #b7791f; width: 68px; }
+    .piece-block { background: #c53030; width: 58px; }
+    .piece-bar { background: #4a5568; width: 88px; }
+    .piece-cable { background: #805ad5; width: 78px; }
+
+    .truck-test {
+      position: absolute;
+      top: 96px;
+      left: 10px;
+      font-size: 2rem;
+      z-index: 10;
+      transition: left 2.5s ease-in-out;
+    }
+
+    /* MISSÃO 2 - TORRE */
+    .tower-ground {
+      background: linear-gradient(180deg, #e0f2fe 0%, #bae6fd 60%, #48bb78 60%, #2f855a 100%);
+      border-radius: 20px;
+      height: 380px;
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      padding-bottom: 24px;
+      border: 3px solid #ffffff;
+      position: relative;
+      overflow: hidden;
+    }
+    .tower-foundation {
+      width: 140px;
+      height: 24px;
+      background: #718096;
+      border-radius: 6px;
+      border: 2px solid #ffffff;
+      box-shadow: 0 4px 0 #4a5568;
+    }
+    .tower-blocks-container {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      gap: 3px;
+      transition: transform 0.3s;
+    }
+    .tower-block-item {
+      width: 100px;
+      height: 32px;
+      background: linear-gradient(180deg, #f6ad55, #dd6b20);
+      border: 2.5px solid #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 3px 0 #9c4221;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: white;
+      font-weight: 900;
+      animation: popPiece 0.25s ease;
+    }
+    .tower-wobble-fail {
+      animation: towerWobbleFall 1.8s forwards ease-in-out;
+    }
+    @keyframes towerWobbleFall {
+      0% { transform: rotate(0deg); }
+      20% { transform: rotate(15deg); }
+      40% { transform: rotate(-20deg); }
+      60% { transform: rotate(30deg); }
+      80% { transform: rotate(-35deg) translateY(40px); opacity: 0.9; }
+      100% { transform: rotate(90deg) translateY(180px); opacity: 0; }
+    }
+
+    /* MISSÃO 3 - ENGRENAGENS */
+    .gear-stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 30px 10px;
+      background: #f8fafc;
+      border-radius: 20px;
+      border: 3px dashed #cbd5e1;
+      min-height: 180px;
+      flex-wrap: wrap;
+    }
+    .gear-slot {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 3px dashed #94a3b8;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #64748b;
+      position: relative;
+    }
+    .gear-spinning {
+      font-size: 3.5rem;
+      animation: spinGear 3s linear infinite;
+    }
+    .gear-spinning.reverse {
+      animation-direction: reverse;
+    }
+    @keyframes spinGear {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* MISSÃO 6 - RECICLAGEM */
+    .recycling-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .waste-item-card {
+      background: #ffffff;
+      border: 3px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 14px 8px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #cbd5e1;
+      transition: all 0.2s;
+    }
+    .waste-item-card.selected {
+      border-color: #ff9f1c;
+      background: #fffaf0;
+      transform: scale(1.05);
+      box-shadow: 0 6px 0 #dd6b20;
+    }
+    .waste-item-card.sorted {
+      opacity: 0.35;
+      pointer-events: none;
+      filter: grayscale(80%);
+    }
+
+    .bin-card {
+      border-radius: 20px;
+      padding: 16px 10px;
+      text-align: center;
+      cursor: pointer;
+      color: #ffffff;
+      border: 3px solid #ffffff;
+      font-weight: 900;
+      box-shadow: 0 6px 0 rgba(0, 0, 0, 0.15);
+      transition: transform 0.1s;
+    }
+    .bin-card:active {
+      transform: translateY(3px);
+    }
+    .bin-metal { background: linear-gradient(180deg, #f6e05e, #d69e2e); color: #744210; }
+    .bin-organic { background: linear-gradient(180deg, #b7791f, #7b341e); }
+    .bin-paper { background: linear-gradient(180deg, #4299e1, #2b6cb0); }
+    .bin-plastic { background: linear-gradient(180deg, #f56565, #c53030); }
+
+    /* MISSÃO 7 - FOGUETE */
+    .rocket-assembly-zone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #0f172a;
+      border-radius: 24px;
+      padding: 30px 16px;
+      min-height: 340px;
+      position: relative;
+      overflow: hidden;
+      border: 3px solid #38bdf8;
+    }
+    .rocket-stars-bg {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: radial-gradient(white 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: 0.4;
+    }
+    .rocket-pad {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 5;
+      transition: transform 3s cubic-bezier(0.5, 0, 0.75, 0);
+    }
+    .rocket-launching {
+      transform: translateY(-500px);
+    }
+    .rocket-slot {
+      width: 140px;
+      height: 64px;
+      border: 2px dashed #38bdf8;
+      border-radius: 12px;
+      margin: 4px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      background: rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+    }
+    .rocket-slot.filled {
+      border: 2.5px solid #ffffff;
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* MISSÃO 8 - QUIZ */
+    .quiz-card {
+      background: #ffffff;
+      border: 3px solid #bfe3f7;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .quiz-question {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #1e3a8a;
+      margin-bottom: 14px;
+    }
+    .quiz-options {
+      display: grid;
+      gap: 10px;
+    }
+    .quiz-opt-btn {
+      text-align: left;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 2px solid #cbd5e1;
+      background: #f8fafc;
+      font-weight: 800;
+      font-size: 0.98rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .quiz-opt-btn:hover {
+      border-color: #38bdf8;
+      background: #f0f9ff;
+    }
+    .quiz-opt-btn.correct {
+      background: #dcfce7;
+      border-color: #22c55e;
+      color: #15803d;
+    }
+    .quiz-opt-btn.wrong {
+      background: #fee2e2;
+      border-color: #ef4444;
+      color: #b91c1c;
+    }
+
+    /* LABORATÓRIO */
+    .lab-bench {
+      background: #ffffff;
+      border: 3.5px solid #cbd5e1;
+      border-radius: 24px;
+      min-height: 140px;
+      padding: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin: 16px 0;
+      box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.05);
+    }
+    .lab-item-badge {
+      font-size: 2.4rem;
+      background: #f1f5f9;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #cbd5e1;
+      transition: transform 0.15s;
+    }
+    .lab-item-badge:hover {
+      transform: scale(1.1);
+    }
+    .lab-item-badge:active {
+      transform: scale(0.95);
+    }
+
+    /* CONQUISTAS */
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .achievement-card {
+      background: #ffffff;
+      border: 3px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 5px 0 rgba(0, 0, 0, 0.05);
+    }
+    .achievement-card.unlocked {
+      border-color: #ffd166;
+      background: #fffdf5;
+      box-shadow: 0 5px 0 #ffe082;
+    }
+    .achieve-icon {
+      font-size: 2.4rem;
+      min-width: 50px;
+      text-align: center;
+    }
+
+    /* MODAL DE CELEBRAÇÃO & CONFETES */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(6px);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-box {
+      background: #ffffff;
+      border: 4px solid #ffd166;
+      border-radius: 28px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+      max-width: 480px;
+      width: 100%;
+      padding: 32px 24px;
+      text-align: center;
+      transform: scale(0.85);
+      transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      position: relative;
+    }
+    .modal-overlay.open .modal-box {
+      transform: scale(1);
+    }
+    .modal-trophy {
+      font-size: 4.5rem;
+      animation: bounceNew 1s infinite alternate;
+      margin-bottom: 8px;
+    }
+    .modal-title {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #0b4f8a;
+      margin: 0 0 10px;
+    }
+    .did-you-know-card {
+      background: #f0fdf4;
+      border: 2.5px solid #86efac;
+      border-radius: 18px;
+      padding: 14px 16px;
+      margin: 16px 0 20px;
+      text-align: left;
+    }
+    .did-you-know-card h4 {
+      margin: 0 0 6px;
+      color: #166534;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .did-you-know-card p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: #14532d;
+      line-height: 1.35;
+    }
+
+    .confetti-piece {
+      position: fixed;
+      width: 10px;
+      height: 14px;
+      z-index: 1000;
+      pointer-events: none;
+      animation: fallDown linear forwards;
+    }
+    @keyframes fallDown {
+      0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* Mini Lia no canto inferior */
+    .floating-lia-companion {
+      position: fixed;
+      bottom: 12px;
+      right: 16px;
+      z-index: 40;
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      pointer-events: none;
+      transition: transform 0.3s ease;
+    }
+    .floating-lia-companion .lia-speech-mini {
+      background: #ffffff;
+      border: 2.5px solid #ff9f1c;
+      border-radius: 16px;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #0f172a;
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.08);
+      max-width: 200px;
+      line-height: 1.25;
+    }
+
+    @media (max-width: 768px) {
+      .header-inner {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .logo-container {
+        justify-content: center;
+      }
+      .stats-pills {
+        justify-content: center;
+      }
+      .level-bar-box {
+        max-width: 100%;
+      }
+      .floating-lia-companion {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cenário Ilustrado de Fundo -->
+  <div class="sky-scenery" aria-hidden="true">
+    <div class="sun-badge">☀️</div>
+    <div class="cloud cloud-1">☁️</div>
+    <div class="cloud cloud-2">☁️</div>
+    <div class="cloud cloud-3">☁️</div>
+  </div>
+
+  <!-- Cabeçalho Principal -->
+  <header class="game-header">
+    <div class="header-inner">
+      <div class="logo-container" onclick="app.navigate('home')" role="button" tabindex="0" aria-label="Ir para a página inicial">
+        <span style="font-size: 1.8rem;">🔧</span>
+        <span class="logo-title">LIA — A PEQUENA ENGENHEIRA</span>
+      </div>
+
+      <div class="stats-pills">
+        <div class="stat-pill pill-stars" title="Estrelas conquistadas">
+          <span>⭐</span> <span id="stat-stars">0</span>
+        </div>
+        <div class="stat-pill pill-screws" title="Parafusos de ouro">
+          <span>🔩</span> <span id="stat-screws">0</span>
+        </div>
+        <div class="stat-pill pill-level" title="Nível atual">
+          <span>🏆</span> Nível <span id="stat-level">1</span>
+        </div>
+        <button id="btn-sound-toggle" class="btn-circle" onclick="app.toggleSound()" aria-label="Ligar ou desligar som" title="Alternar som">
+          🔊
+        </button>
+      </div>
+
+      <div class="level-bar-box" title="Progresso até o próximo nível">
+        <div class="level-bar-label">
+          <span>Próximo nível</span>
+          <span id="level-progress-text">0/5 ⭐</span>
+        </div>
+        <div class="level-bar-track">
+          <div id="level-bar-fill" class="level-bar-fill"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Container Principal das Telas -->
+  <main class="game-main">
+
+    <!-- ==================== TELA 1: HOME ==================== -->
+    <section id="view-home" class="view-screen active">
+      <div class="cartoon-card hero-panel">
+        <h1 class="hero-title">Lia — A Pequena Engenheira</h1>
+        <p class="hero-subtitle">Imagine. Monte. Teste. Descubra!</p>
+
+        <div class="hero-lia-zone">
+          <div class="lia-speech" id="hero-lia-speech">
+            Oi! Eu sou a Lia! 👷‍♀️ Vamos construir coisas incríveis e aprender engenharia juntos?
+          </div>
+
+          <!-- Avatar Ilustrado de Lia com Capacete e Fones de Coelho -->
+          <div class="lia-avatar-box" style="width: 140px; height: 140px;">
+            <svg class="lia-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Orelhas de coelho do fone -->
+              <path d="M 38 32 C 30 14 34 2 40 4 C 46 6 46 20 44 32 Z" fill="#f472b6" stroke="#db2777" stroke-width="2.5"/>
+              <path d="M 40 28 C 36 18 38 8 41 9 C 44 10 44 20 43 28 Z" fill="#fbcfe8"/>
+              <path d="M 82 32 C 90 14 86 2 80 4 C 74 6 74 20 76 32 Z" fill="#f472b6" stroke="#db2777" stroke-width="2.5"/>
+              <path d="M 80 28 C 84 18 82 8 79 9 C 76 10 76 20 77 28 Z" fill="#fbcfe8"/>
+              <path d="M 36 34 C 48 20 72 20 84 34" stroke="#db2777" stroke-width="4" stroke-linecap="round"/>
+              <!-- Cabelo / Cabeça -->
+              <circle cx="60" cy="64" r="32" fill="#78350f"/>
+              <circle cx="60" cy="66" r="28" fill="#fcd34d"/>
+              <!-- Olhos e Bochechas -->
+              <circle cx="50" cy="65" r="3.5" fill="#1e293b"/>
+              <circle cx="70" cy="65" r="3.5" fill="#1e293b"/>
+              <circle cx="51" cy="63.5" r="1.2" fill="#ffffff"/>
+              <circle cx="71" cy="63.5" r="1.2" fill="#ffffff"/>
+              <ellipse cx="44" cy="71" rx="4" ry="2.5" fill="#f87171" opacity="0.6"/>
+              <ellipse cx="76" cy="71" rx="4" ry="2.5" fill="#f87171" opacity="0.6"/>
+              <!-- Sorriso doce -->
+              <path d="M 52 74 Q 60 82 68 74" stroke="#991b1b" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+              <!-- Capacete de Engenheira Amarelo -->
+              <path d="M 28 50 C 28 26 92 26 92 50 Z" fill="#facc15" stroke="#ca8a04" stroke-width="3"/>
+              <rect x="22" y="48" width="76" height="8" rx="4" fill="#eab308" stroke="#ca8a04" stroke-width="2.5"/>
+              <circle cx="60" cy="40" r="5" fill="#ffffff" stroke="#ca8a04" stroke-width="1.5"/>
+              <!-- Conchas do fone rosa -->
+              <rect x="26" y="52" width="8" height="18" rx="4" fill="#ec4899" stroke="#be185d" stroke-width="2"/>
+              <rect x="86" y="52" width="8" height="18" rx="4" fill="#ec4899" stroke="#be185d" stroke-width="2"/>
+              <!-- Macacão de Engenheira Azul -->
+              <path d="M 40 94 L 80 94 L 86 118 L 34 118 Z" fill="#2563eb"/>
+              <rect x="46" y="94" width="28" height="24" rx="2" fill="#3b82f6"/>
+              <!-- Cinto de ferramentas amarelo -->
+              <rect x="36" y="110" width="48" height="6" rx="2" fill="#eab308"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <button class="cartoon-btn btn-green" onclick="app.navigate('map')" aria-label="Jogar Missões">
+            ▶ Jogar Missões
+          </button>
+          <button class="cartoon-btn btn-blue" onclick="app.navigate('lab')" aria-label="Abrir Laboratório Livre">
+            🧪 Laboratório
+          </button>
+          <button class="cartoon-btn btn-orange" onclick="app.navigate('achievements')" aria-label="Ver Conquistas">
+            🏅 Conquistas
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TELA 2: MAPA DE MUNDOS ==================== -->
+    <section id="view-map" class="view-screen">
+      <div class="map-header-bar">
+        <button class="btn-circle" onclick="app.navigate('home')" aria-label="Voltar para a Home" title="Voltar">
+          ←
+        </button>
+        <h2 class="map-title">🗺️ Mapa de Mundos & Missões</h2>
+        <div>
+          <button class="cartoon-btn btn-blue" style="min-height: 40px; padding: 6px 14px; font-size: 0.9rem;" onclick="app.navigate('lab')">
+            🧪 Laboratório
+          </button>
+        </div>
+      </div>
+
+      <div class="worlds-grid" id="worlds-container">
+        <!-- Renderizado dinamicamente via JS com status, badges Novo e bloqueio -->
+      </div>
+    </section>
+
+    <!-- ==================== TELA 3: CONTAINER DA MISSÃO ==================== -->
+    <section id="view-mission" class="view-screen">
+      <div class="mission-header-bar">
+        <button class="btn-circle" onclick="app.navigate('map')" aria-label="Voltar para o mapa" title="Voltar ao mapa">
+          ←
+        </button>
+        <div class="mission-title-box">
+          <h2 class="mission-title" id="active-mission-title">Missão</h2>
+        </div>
+      </div>
+
+      <div class="mission-helper">
+        <span style="font-size: 2.2rem;">👷‍♀️</span>
+        <div id="mission-lia-tip" style="font-size: 0.98rem; font-weight: 700; color: #1e3a8a;">
+          Explicação e dica da Lia.
+        </div>
+      </div>
+
+      <div class="cartoon-card" id="mission-workspace">
+        <!-- O conteúdo interativo da missão 1 a 8 é inserido aqui -->
+      </div>
+    </section>
+
+    <!-- ==================== TELA 4: LABORATÓRIO LIVRE ==================== -->
+    <section id="view-lab" class="view-screen">
+      <div class="mission-header-bar">
+        <button class="btn-circle" onclick="app.navigate('home')" aria-label="Voltar" title="Voltar">
+          ←
+        </button>
+        <h2 class="map-title">🧪 Laboratório Livre de Invenções</h2>
+        <button class="cartoon-btn btn-orange" onclick="app.clearLab()" aria-label="Limpar bancada">
+          🔄 Limpar
+        </button>
+      </div>
+
+      <div class="mission-helper">
+        <span style="font-size: 2.2rem;">👷‍♀️</span>
+        <div style="font-size: 0.98rem; font-weight: 700; color: #1e3a8a;">
+          Toque nos componentes para adicioná-los à bancada! Junte 3 ou mais elementos diferentes para testar e descobrir invenções malucas e ganhar estrelas!
+        </div>
+      </div>
+
+      <div class="cartoon-card">
+        <h3 style="margin: 0 0 12px; color: #0b4f8a; font-weight: 900;">1. Caixa de Peças:</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;" id="lab-palette">
+          <!-- 10 emojis de engenharia -->
+        </div>
+
+        <h3 style="margin: 0 0 8px; color: #0b4f8a; font-weight: 900;">2. Sua Bancada de Montagem:</h3>
+        <div class="lab-bench" id="lab-workbench">
+          <span style="color: #94a3b8; font-weight: 700;">Toque nos itens acima para colocar na bancada!</span>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 16px;">
+          <span id="lab-count-indicator" style="font-weight: 900; color: #3b5998;">Peças na bancada: 0</span>
+          <button class="cartoon-btn btn-green" onclick="app.testLabInvention()" aria-label="Testar Invenção">
+            ⚡ Testar Invenção!
+          </button>
+        </div>
+
+        <div id="lab-result-card" style="margin-top: 16px; display: none;" class="did-you-know-card">
+          <h4 id="lab-result-title">🎉 Invenção Criada!</h4>
+          <p id="lab-result-desc"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TELA 5: CONQUISTAS ==================== -->
+    <section id="view-achievements" class="view-screen">
+      <div class="mission-header-bar">
+        <button class="btn-circle" onclick="app.navigate('home')" aria-label="Voltar para a Home" title="Voltar">
+          ←
+        </button>
+        <h2 class="map-title">🏅 Galeria de Conquistas</h2>
+        <button class="cartoon-btn btn-purple" style="min-height: 40px; padding: 6px 14px; font-size: 0.85rem;" onclick="app.resetProgressConfirm()" aria-label="Reiniciar progresso">
+          🔄 Reiniciar Progresso
+        </button>
+      </div>
+
+      <div class="mission-helper">
+        <span style="font-size: 2.2rem;">🏆</span>
+        <div style="font-size: 0.98rem; font-weight: 700; color: #1e3a8a;">
+          Complete missões, teste criações e mostre que você é a maior engenheira da cidade para desbloquear todos os troféus!
+        </div>
+      </div>
+
+      <div class="achievements-grid" id="achievements-container">
+        <!-- Renderizado dinamicamente -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Mini Lia Flutuante Decorativa com Balão Contextual -->
+  <aside class="floating-lia-companion" id="floating-lia" aria-hidden="true">
+    <div class="lia-speech-mini" id="floating-lia-text">Você consegue, engenheira! 🌟</div>
+    <div style="width: 70px; height: 70px;">
+      <svg viewBox="0 0 120 120" style="width: 100%; height: 100%;">
+        <path d="M 38 32 C 30 14 34 2 40 4 C 46 6 46 20 44 32 Z" fill="#f472b6"/>
+        <path d="M 82 32 C 90 14 86 2 80 4 C 74 6 74 20 76 32 Z" fill="#f472b6"/>
+        <circle cx="60" cy="66" r="28" fill="#fcd34d"/>
+        <circle cx="50" cy="65" r="3.5" fill="#1e293b"/>
+        <circle cx="70" cy="65" r="3.5" fill="#1e293b"/>
+        <path d="M 52 74 Q 60 82 68 74" stroke="#991b1b" stroke-width="2.5" fill="none"/>
+        <path d="M 28 50 C 28 26 92 26 92 50 Z" fill="#facc15"/>
+        <rect x="22" y="48" width="76" height="8" rx="4" fill="#eab308"/>
+      </svg>
+    </div>
+  </aside>
+
+  <!-- Modal de Celebração de Missão Concluída -->
+  <div class="modal-overlay" id="celebration-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-box">
+      <div class="modal-trophy">🎉</div>
+      <h3 class="modal-title" id="modal-title">Missão Concluída!</h3>
+      <p id="modal-subtitle" style="font-size: 1.1rem; font-weight: 800; color: #2e7d32; margin: 0 0 12px;">
+        Muito bem, engenheira! Você arrasou!
+      </p>
+
+      <div style="display: flex; justify-content: center; gap: 16px; margin: 12px 0;">
+        <span class="stat-pill pill-stars" id="modal-reward-stars">+2 ⭐</span>
+        <span class="stat-pill pill-screws" id="modal-reward-screws">+1 🔩</span>
+      </div>
+
+      <div class="did-you-know-card">
+        <h4>💡 Você Sabia?</h4>
+        <p id="modal-did-you-know">Fato educativo super interessante.</p>
+      </div>
+
+      <button class="cartoon-btn btn-green" onclick="app.closeModalAndMap()" aria-label="Continuar para o Mapa">
+        🗺️ Continuar no Mapa
+      </button>
+    </div>
+  </div>
+
+  <script>
+    /* =====================================================================
+       LIA — A PEQUENA ENGENHEIRA (v3 Visual Ilustrado)
+       Mecanismos, Web Audio API, Missões 1 a 8, Estado no localStorage
+       ===================================================================== */
+
+    // Sintetizador de Som com Web Audio API (sem dependências externas)
+    const AudioEngine = {
+      ctx: null,
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            this.ctx = new AudioContext();
+          }
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      },
+      playPop() {
+        if (!app.state.soundEnabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(450, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.18, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.08);
+      },
+      playFanfare() {
+        if (!app.state.soundEnabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        notes.forEach((freq, idx) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          const start = this.ctx.currentTime + idx * 0.11;
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, start);
+          gain.gain.setValueAtTime(0.2, start);
+          gain.gain.exponentialRampToValueAtTime(0.01, start + 0.35);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(start);
+          osc.stop(start + 0.35);
+        });
+      },
+      playGentleBoing() {
+        if (!app.state.soundEnabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(320, this.ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(180, this.ctx.currentTime + 0.22);
+        gain.gain.setValueAtTime(0.18, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.22);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.22);
+      },
+      playLaunch() {
+        if (!app.state.soundEnabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(140, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 1.2);
+        gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 1.2);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 1.2);
+      }
+    };
+
+    // Definição dos 10 Mundos e Missões
+    const WORLDS_DATA = [
+      { id: 1, name: "Pontes", icon: "🌉", desc: "Construa caminhos firmes sobre o rio azul!", missionId: 1, open: true },
+      { id: 2, name: "Construções", icon: "🏠", desc: "Equilibre blocos e crie uma torre alta sem cair!", missionId: 2, open: true },
+      { id: 3, name: "Máquinas", icon: "⚙️", desc: "Conecte engrenagens para a máquina girar!", missionId: 3, open: true },
+      { id: 4, name: "Energia", icon: "⚡", desc: "Descubra o poder do Sol, do Vento e das Águas!", missionId: 4, open: true },
+      { id: 5, name: "Água", icon: "💧", desc: "Limpe e cuide do rio para salvar a natureza!", missionId: 5, open: true },
+      { id: 6, name: "Meio Ambiente", icon: "🌱", desc: "Separe os materiais nas lixeiras coloridas certas!", missionId: 6, isNew: true },
+      { id: 7, name: "Espaço", icon: "🚀", desc: "Monte os estágios do foguete e viaje às estrelas!", missionId: 7, isNew: true },
+      { id: 8, name: "Cidade Inteligente", icon: "🏙️", desc: "Tome decisões ecológicas para um futuro limpo!", missionId: 8, isNew: true },
+      { id: 9, name: "Transportes", icon: "🚗", desc: "Crie veículos supersônicos e ecológicos!", lockedFuture: true },
+      { id: 10, name: "Grandes Inventos", icon: "💡", desc: "Descubra invenções que mudaram a humanidade!", lockedFuture: true }
+    ];
+
+    // Conquistas
+    const ACHIEVEMENTS_DATA = [
+      { id: 'm1', icon: '🌉', title: 'Mestre das Pontes', desc: 'Completou a travessia segura do rio.' },
+      { id: 'm2', icon: '🏢', title: 'Arquiteta Firme', desc: 'Ergueu uma torre em perfeito equilíbrio.' },
+      { id: 'm3', icon: '⚙️', title: 'Engenheira Mecânica', desc: 'Fez todas as engrenagens girarem juntas.' },
+      { id: 'm4', icon: '⚡', title: 'Amiga do Sol e Vento', desc: 'Escolheu energias 100% limpas para a cidade.' },
+      { id: 'm5', icon: '💧', title: 'Protetora das Águas', desc: 'Limpou e recuperou o rio da cidade.' },
+      { id: 'm6', icon: '🌱', title: 'Campeã da Reciclagem', desc: 'Separou todos os materiais nas lixeiras certas.' },
+      { id: 'm7', icon: '🚀', title: 'Astronauta Curiosa', desc: 'Montou o foguete em ordem e decolou.' },
+      { id: 'm8', icon: '🏙️', title: 'Prefeita Ecológica', desc: 'Acertou o quiz sobre cidades sustentáveis.' },
+      { id: 'expert', icon: '🏅', title: 'Engenheira Expert', desc: 'Concluiu todas as 8 missões da Lia!' },
+      { id: 'inventor', icon: '🧪', title: 'Inventora Criativa', desc: 'Testou criações no laboratório pelo menos 3 vezes.' }
+    ];
+
+    // Fatos Educativos "Você sabia?"
+    const DID_YOU_KNOW = {
+      1: "As primeiras pontes da história eram feitas com troncos caídos e pedras! Hoje em dia, os engenheiros usam cabos de aço gigantescos que suportam milhares de carros ao mesmo tempo!",
+      2: "O maior edifício do mundo tem mais de 800 metros de altura! Ele precisa de bases subterrâneas super profundas para suportar a força do vento sem tombar.",
+      3: "As engrenagens foram criadas há mais de 2.000 anos! Elas conseguem transferir força e mudar a velocidade das coisas, desde relógios de pulso até bicicletas e guindastes.",
+      4: "O Sol envia para o nosso planeta em apenas uma hora mais energia do que a humanidade inteira gasta em um ano! A energia solar e eólica não soltam fumaça nem poluem.",
+      5: "Menos de 1% de toda a água da Terra é doce e própria para bebermos! Cuidar dos nossos rios e não jogar lixo protege a água e a vida de todos os animais.",
+      6: "Uma lata de alumínio reciclada pode virar uma nova latinha nas prateleiras em apenas 60 dias! A reciclagem economiza energia e protege as florestas.",
+      7: "Para conseguir sair da atração da gravidade da Terra e chegar ao espaço, um foguete precisa atingir uma velocidade de quase 28.000 km por hora!",
+      8: "Cidades inteligentes usam postes de luz que só acendem quando alguém passa e tetos verdes com plantas nos prédios para diminuir o calor da cidade!"
+    };
+
+    // Estado Geral da Aplicação
+    const app = {
+      storageKey: 'lia_engenheira_save_v3',
+      state: {
+        stars: 0,
+        screws: 0,
+        completedMissions: [],
+        labTestsCount: 0,
+        achievements: [],
+        soundEnabled: true
+      },
+      currentMissionId: 1,
+
+      // Estado interno transitório das missões
+      missionState: {
+        // Missão 1
+        bridgePieces: [],
+        // Missão 2
+        towerBlocks: 0,
+        // Missão 3
+        gearSequence: [],
+        gearAttempts: 0,
+        // Missão 4
+        energySelected: [],
+        // Missão 5
+        riverCleaned: false,
+        riverTreated: false,
+        // Missão 6
+        selectedWaste: null,
+        sortedWastes: [],
+        // Missão 7
+        rocketStages: [],
+        // Missão 8
+        quizAnswers: [null, null, null],
+        // Lab
+        labItems: []
+      },
+
+      init() {
+        this.loadState();
+        this.renderHeader();
+        this.renderWorlds();
+        this.renderAchievements();
+        this.initLabPalette();
+        this.updateFloatingLia("Olá, engenheira! Escolha uma missão no mapa!");
+
+        // Ativa sons no primeiro clique geral
+        window.addEventListener('click', () => AudioEngine.init(), { once: true });
+      },
+
+      loadState() {
+        try {
+          const saved = localStorage.getItem(this.storageKey);
+          if (saved) {
+            this.state = Object.assign(this.state, JSON.parse(saved));
+          }
+        } catch (e) {
+          console.warn('Falha ao carregar localStorage:', e);
+        }
+      },
+
+      saveState() {
+        try {
+          localStorage.setItem(this.storageKey, JSON.stringify(this.state));
+        } catch (e) {
+          console.warn('Falha ao salvar localStorage:', e);
+        }
+        this.renderHeader();
+      },
+
+      toggleSound() {
+        this.state.soundEnabled = !this.state.soundEnabled;
+        const btn = document.getElementById('btn-sound-toggle');
+        btn.textContent = this.state.soundEnabled ? '🔊' : '🔇';
+        if (this.state.soundEnabled) {
+          AudioEngine.playPop();
+        }
+        this.saveState();
+      },
+
+      getLevel() {
+        return 1 + Math.floor(this.state.stars / 5);
+      },
+
+      renderHeader() {
+        const level = this.getLevel();
+        const starsForNext = this.state.stars % 5;
+
+        document.getElementById('stat-stars').textContent = this.state.stars;
+        document.getElementById('stat-screws').textContent = this.state.screws;
+        document.getElementById('stat-level').textContent = level;
+        document.getElementById('level-progress-text').textContent = `${starsForNext}/5 ⭐`;
+        document.getElementById('level-bar-fill').style.width = `${(starsForNext / 5) * 100}%`;
+        document.getElementById('btn-sound-toggle').textContent = this.state.soundEnabled ? '🔊' : '🔇';
+      },
+
+      navigate(screenName) {
+        AudioEngine.playPop();
+        document.querySelectorAll('.view-screen').forEach(el => el.classList.remove('active'));
+        const target = document.getElementById(`view-${screenName}`);
+        if (target) {
+          target.classList.add('active');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        if (screenName === 'map') {
+          this.renderWorlds();
+          this.updateFloatingLia("Escolha um mundo colorido para começar!");
+        } else if (screenName === 'home') {
+          this.updateFloatingLia("Que bom ver você! Vamos construir?");
+        } else if (screenName === 'achievements') {
+          this.renderAchievements();
+          this.updateFloatingLia("Veja todas as suas medalhas brilhantes!");
+        }
+      },
+
+      updateFloatingLia(text) {
+        const el = document.getElementById('floating-lia-text');
+        if (el) el.textContent = text;
+      },
+
+      // Verifica se as 5 primeiras missões originais foram concluídas
+      isNewMissionsUnlocked() {
+        const required = [1, 2, 3, 4, 5];
+        return required.every(id => this.state.completedMissions.includes(id));
+      },
+
+      renderWorlds() {
+        const container = document.getElementById('worlds-container');
+        if (!container) return;
+        const unlockedNew = this.isNewMissionsUnlocked();
+
+        container.innerHTML = WORLDS_DATA.map(w => {
+          const isCompleted = w.missionId && this.state.completedMissions.includes(w.missionId);
+          const isLocked = w.lockedFuture || (w.isNew && !unlockedNew);
+
+          let actionBtnHtml = '';
+          if (w.lockedFuture) {
+            actionBtnHtml = `<span style="font-weight: 800; color: #94a3b8;">🔒 Em breve!</span>`;
+          } else if (w.isNew && !unlockedNew) {
+            actionBtnHtml = `<span style="font-weight: 800; color: #d97706; font-size: 0.88rem;">🔒 Conclua as 5 primeiras missões!</span>`;
+          } else if (isCompleted) {
+            actionBtnHtml = `
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <span style="color: #16a34a; font-weight: 900;">✅ Concluída!</span>
+                <button class="cartoon-btn btn-blue" style="min-height: 40px; padding: 6px 14px; font-size: 0.9rem;" onclick="app.startMission(${w.missionId})">Jogar de novo</button>
+              </div>`;
+          } else {
+            actionBtnHtml = `
+              <button class="cartoon-btn btn-green" style="width: 100%;" onclick="app.startMission(${w.missionId})">
+                Começar Missão ▶
+              </button>`;
+          }
+
+          return `
+            <div class="world-card ${isLocked ? 'locked' : ''}">
+              ${w.isNew ? '<span class="world-tag-new">Novo! 🔓</span>' : ''}
+              <div>
+                <div class="world-icon-badge">${w.icon}</div>
+                <h3 class="world-title">${w.name}</h3>
+                <p class="world-desc">${w.desc}</p>
+              </div>
+              <div style="margin-top: 8px;">
+                ${actionBtnHtml}
+              </div>
+            </div>
+          `;
+        }).join('');
+      },
+
+      // Inicia uma Missão
+      startMission(missionId) {
+        this.currentMissionId = missionId;
+        AudioEngine.playPop();
+
+        const titleEl = document.getElementById('active-mission-title');
+        const tipEl = document.getElementById('mission-lia-tip');
+        const workspace = document.getElementById('mission-workspace');
+
+        this.navigate('mission');
+
+        switch (missionId) {
+          case 1:
+            titleEl.textContent = "Missão 1 — A Ponte da Lia 🌉";
+            tipEl.textContent = "Adicione peças para formar uma ponte contínua de uma margem até a outra! Peças de aço e cabos deixam a ponte mais forte e resistente!";
+            this.setupMission1(workspace);
+            break;
+          case 2:
+            titleEl.textContent = "Missão 2 — Torre Equilibrada 🏢";
+            tipEl.textContent = "Adicione blocos com cuidado! Você precisa de 6 a 8 blocos para a torre ficar firme. Cuidado: se passar de 8, ela balança e cai!";
+            this.setupMission2(workspace);
+            break;
+          case 3:
+            titleEl.textContent = "Missão 3 — Máquina de Engrenagens ⚙️";
+            tipEl.textContent = "Conecte as engrenagens na sequência certa para transmitir a força do motor até a hélice! Tente descobrir a combinação perfeita!";
+            this.setupMission3(workspace);
+            break;
+          case 4:
+            titleEl.textContent = "Missão 4 — Energia para a Cidade ⚡";
+            tipEl.textContent = "Escolha as fontes de energia para iluminar a cidade. Dica de engenheira: fontes renováveis geram energia limpa sem soltar poluição!";
+            this.setupMission4(workspace);
+            break;
+          case 5:
+            titleEl.textContent = "Missão 5 — Salve o Rio 💧";
+            tipEl.textContent = "O rio precisa de cuidados! Escolha as atitudes certas para tratar as águas e recolher os resíduos antes que os peixinhos adoeçam.";
+            this.setupMission5(workspace);
+            break;
+          case 6:
+            titleEl.textContent = "Missão 6 — Reciclagem Divertida 🌱";
+            tipEl.textContent = "Toque em um item de lixo e depois na lixeira da cor certa para reciclá-lo! Separe todos os 4 itens com perfeição!";
+            this.setupMission6(workspace);
+            break;
+          case 7:
+            titleEl.textContent = "Missão 7 — Foguete ao Espaço 🚀";
+            tipEl.textContent = "Monte os estágios do foguete na ordem da engenharia aeroespacial: primeiro a ponta aerodinâmica, depois o corpo/cabine, e por fim o motor potente!";
+            this.setupMission7(workspace);
+            break;
+          case 8:
+            titleEl.textContent = "Missão 8 — Cidade Inteligente 🏙️";
+            tipEl.textContent = "Responda às 3 perguntas sobre sustentabilidade e transforme a cidade num lugar incrível e limpo para todas as famílias!";
+            this.setupMission8(workspace);
+            break;
+        }
+      },
+
+      /* -------------------------------------------------------------
+         MISSÃO 1: A PONTE DA LIA
+         ------------------------------------------------------------- */
+      setupMission1(container) {
+        this.missionState.bridgePieces = [];
+
+        container.innerHTML = `
+          <div class="bridge-board" id="bridge-board">
+            <div class="shore-left"></div>
+            <div class="river-stream"><div class="river-wave"></div></div>
+            <div class="shore-right"></div>
+            <div class="bridge-deck" id="bridge-deck"></div>
+            <div class="truck-test" id="bridge-truck">🛻</div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+            <span style="font-weight: 800; color: #1e3a8a;" id="bridge-pieces-count">Peças: 0/20</span>
+            <div style="display: flex; gap: 8px;">
+              <button class="cartoon-btn btn-orange" style="min-height: 40px; padding: 6px 14px; font-size: 0.9rem;" onclick="app.clearBridgePieces()">
+                🔄 Limpar Peças
+              </button>
+              <button class="cartoon-btn btn-green" style="min-height: 40px; padding: 6px 16px; font-size: 0.95rem;" onclick="app.testBridge()">
+                🚗 Testar Ponte!
+              </button>
+            </div>
+          </div>
+
+          <h4 style="margin: 0 0 10px; color: #1e293b; font-weight: 900;">Escolha uma peça para adicionar ao caminho:</h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px;">
+            <button class="cartoon-btn" style="background: #b7791f; color: white;" onclick="app.addBridgePiece('wood')">
+              🪵 Madeira (+70m)
+            </button>
+            <button class="cartoon-btn" style="background: #c53030; color: white;" onclick="app.addBridgePiece('block')">
+              🧱 Bloco (+60m)
+            </button>
+            <button class="cartoon-btn" style="background: #4a5568; color: white;" onclick="app.addBridgePiece('bar')">
+              📏 Barra (+90m)
+            </button>
+            <button class="cartoon-btn" style="background: #805ad5; color: white;" onclick="app.addBridgePiece('cable')">
+              🪢 Cabo (+80m)
+            </button>
+          </div>
+          <div id="bridge-feedback" style="margin-top: 14px; font-weight: 800; font-size: 0.95rem;"></div>
+        `;
+      },
+
+      addBridgePiece(type) {
+        if (this.missionState.bridgePieces.length >= 20) {
+          document.getElementById('bridge-feedback').innerHTML = '<span style="color: #b91c1c;">Limite de 20 peças atingido! Teste ou limpe as peças.</span>';
+          return;
+        }
+        AudioEngine.playPop();
+        this.missionState.bridgePieces.push(type);
+        this.renderBridgeDeck();
+      },
+
+      clearBridgePieces() {
+        AudioEngine.playPop();
+        this.missionState.bridgePieces = [];
+        this.renderBridgeDeck();
+        const truck = document.getElementById('bridge-truck');
+        if (truck) truck.style.left = '10px';
+        document.getElementById('bridge-feedback').innerHTML = '';
+      },
+
+      renderBridgeDeck() {
+        const deck = document.getElementById('bridge-deck');
+        const countLabel = document.getElementById('bridge-pieces-count');
+        if (!deck) return;
+
+        countLabel.textContent = `Peças: ${this.missionState.bridgePieces.length}/20`;
+        deck.innerHTML = this.missionState.bridgePieces.map(type => {
+          let label = 'Madeira';
+          let cls = 'piece-wood';
+          if (type === 'block') { label = 'Bloco'; cls = 'piece-block'; }
+          if (type === 'bar') { label = 'Aço'; cls = 'piece-bar'; }
+          if (type === 'cable') { label = 'Cabo'; cls = 'piece-cable'; }
+          return `<div class="bridge-piece ${cls}">${label}</div>`;
+        }).join('');
+      },
+
+      testBridge() {
+        const pieces = this.missionState.bridgePieces;
+        const feedback = document.getElementById('bridge-feedback');
+        const truck = document.getElementById('bridge-truck');
+
+        // Cálculo de comprimento contínuo sobre o rio (gap de aprox 310m necessários)
+        let totalSpan = 0;
+        let barsCount = 0;
+        let cablesCount = 0;
+
+        pieces.forEach(p => {
+          if (p === 'wood') totalSpan += 70;
+          if (p === 'block') totalSpan += 60;
+          if (p === 'bar') { totalSpan += 90; barsCount++; }
+          if (p === 'cable') { totalSpan += 80; cablesCount++; }
+        });
+
+        if (pieces.length === 0) {
+          feedback.innerHTML = '<span style="color: #b91c1c;">⚠️ Monte uma corrente de peças de uma margem à outra antes de testar!</span>';
+          AudioEngine.playGentleBoing();
+          return;
+        }
+
+        if (totalSpan < 310) {
+          // Não alcançou a outra margem
+          truck.style.left = '160px';
+          AudioEngine.playGentleBoing();
+          setTimeout(() => {
+            truck.style.left = '10px';
+          }, 1200);
+          feedback.innerHTML = '<span style="color: #b91c1c;">⚠️ Faltou uma peça no meio para alcançar a outra margem! A ponte está muito curta.</span>';
+          return;
+        }
+
+        // Sucesso! Anima o carrinho cruzando toda a ponte
+        truck.style.left = 'calc(100% - 60px)';
+        AudioEngine.playPop();
+
+        // Resistência: base 6 + bônus de barras e cabos (até 10/10)
+        let resist = 6 + (barsCount * 1.5) + (cablesCount * 1.0);
+        if (resist > 10) resist = 10;
+        resist = Math.round(resist * 10) / 10;
+
+        feedback.innerHTML = `<span style="color: #15803d;">🎉 A ponte atravessou com sucesso! Nota de Resistência: <strong>${resist}/10</strong>!</span>`;
+
+        setTimeout(() => {
+          this.completeMission(1, 2, 1);
+        }, 1600);
+      },
+
+      /* -------------------------------------------------------------
+         MISSÃO 2: TORRE EQUILIBRADA
+         ------------------------------------------------------------- */
+      setupMission2(container) {
+        this.missionState.towerBlocks = 0;
+
+        container.innerHTML = `
+          <div class="tower-ground" id="tower-ground">
+            <div class="tower-foundation"></div>
+            <div class="tower-blocks-container" id="tower-blocks-container"></div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin: 16px 0;">
+            <span style="font-size: 1.15rem; font-weight: 900; color: #1e3a8a;" id="tower-count">
+              Blocos: 0 / 6 (Ideal: 6 a 8)
+            </span>
+            <div style="display: flex; gap: 8px;">
+              <button class="cartoon-btn btn-orange" style="min-height: 40px; padding: 6px 14px; font-size: 0.9rem;" onclick="app.removeTowerBlock()">
+                ⬅️ Remover Último
+              </button>
+              <button class="cartoon-btn btn-green" style="min-height: 40px; padding: 6px 16px; font-size: 0.95rem;" onclick="app.testTower()">
+                💨 Testar Equilíbrio!
+              </button>
+            </div>
+          </div>
+
+          <div style="text-align: center;">
+            <button class="cartoon-btn btn-blue" style="font-size: 1.1rem; padding: 14px 28px;" onclick="app.addTowerBlock()">
+              ➕ Adicionar Bloco 🧱
+            </button>
+          </div>
+          <div id="tower-feedback" style="margin-top: 14px; font-weight: 800; font-size: 0.95rem; text-align: center;"></div>
+        `;
+      },
+
+      addTowerBlock() {
+        const count = ++this.missionState.towerBlocks;
+        AudioEngine.playPop();
+        const container = document.getElementById('tower-blocks-container');
+        const countEl = document.getElementById('tower-count');
+        const feedback = document.getElementById('tower-feedback');
+
+        countEl.textContent = `Blocos: ${count} / 6 (Ideal: 6 a 8)`;
+
+        // Adiciona bloco
+        const block = document.createElement('div');
+        block.className = 'tower-block-item';
+        block.textContent = `🧱 Bloco #${count}`;
+        container.appendChild(block);
+
+        // Se passar de 8, torre cai!
+        if (count > 8) {
+          AudioEngine.playGentleBoing();
+          container.classList.add('tower-wobble-fail');
+          feedback.innerHTML = '<span style="color: #b91c1c;">💥 Ah não! A torre ficou alta demais e desabou! Vamos recomeçar mantendo entre 6 e 8 blocos.</span>';
+
+          setTimeout(() => {
+            this.missionState.towerBlocks = 0;
+            container.innerHTML = '';
+            container.classList.remove('tower-wobble-fail');
+            countEl.textContent = 'Blocos: 0 / 6 (Ideal: 6 a 8)';
+          }, 1800);
+        } else if (count >= 6 && count <= 8) {
+          feedback.innerHTML = '<span style="color: #15803d;">✨ Altura perfeita! Clique em "Testar Equilíbrio!" para aprovar a construção!</span>';
+        } else {
+          feedback.innerHTML = '';
+        }
+      },
+
+      removeTowerBlock() {
+        if (this.missionState.towerBlocks <= 0) return;
+        AudioEngine.playPop();
+        this.missionState.towerBlocks--;
+        const container = document.getElementById('tower-blocks-container');
+        if (container.lastChild) {
+          container.removeChild(container.lastChild);
+        }
+        document.getElementById('tower-count').textContent = `Blocos: ${this.missionState.towerBlocks} / 6 (Ideal: 6 a 8)`;
+        document.getElementById('tower-feedback').innerHTML = '';
+      },
+
+      testTower() {
+        const count = this.missionState.towerBlocks;
+        const feedback = document.getElementById('tower-feedback');
+
+        if (count < 6) {
+          AudioEngine.playGentleBoing();
+          feedback.innerHTML = '<span style="color: #b91c1c;">A torre ainda está muito baixinha! Adicione pelo menos 6 blocos.</span>';
+        } else if (count >= 6 && count <= 8) {
+          AudioEngine.playFanfare();
+          feedback.innerHTML = '<span style="color: #15803d;">🏆 Incrível! O vento passou e a torre permaneceu perfeitamente equilibrada!</span>';
+          setTimeout(() => {
+            this.completeMission(2, 2, 1);
+          }, 1200);
+        }
+      },
+
+      /* -------------------------------------------------------------
+         MISSÃO 3: MÁQUINA DE ENGRENAGENS
+         ------------------------------------------------------------- */
+      setupMission3(container) {
+        this.missionState.gearSequence = [];
+        this.missionState.gearAttempts = 0;
+
+        container.innerHTML = `
+          <div class="gear-stage">
+            <div style="text-align: center;">
+              <div style="font-size: 2.2rem;">⚡</div>
+              <small style="font-weight: 800; color: #475569;">Motor</small>
+            </div>
+            <div class="gear-slot" id="gear-slot-0"><span>1º</span></div>
+            <div style="font-size: 1.5rem; color: #94a3b8;">➔</div>
+            <div class="gear-slot" id="gear-slot-1"><span>2º</span></div>
+            <div style="font-size: 1.5rem; color: #94a3b8;">➔</div>
+            <div class="gear-slot" id="gear-slot-2"><span>3º</span></div>
+            <div style="text-align: center;">
+              <div style="font-size: 2.2rem;">🚜</div>
+              <small style="font-weight: 800; color: #475569;">Trator</small>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin: 16px 0;">
+            <span style="font-weight: 800; color: #1e3a8a;" id="gear-attempts-label">Tentativas: 0/3</span>
+            <div style="display: flex; gap: 8px;">
+              <button class="cartoon-btn btn-orange" style="min-height: 40px; padding: 6px 14px; font-size: 0.9rem;" onclick="app.clearGears()">
+                🔄 Limpar Sequência
+              </button>
+              <button class="cartoon-btn btn-green" style="min-height: 40px; padding: 6px 16px; font-size: 0.95rem;" onclick="app.testGears()">
+                ⚙️ Testar Máquina!
+              </button>
+            </div>
+          </div>
+
+          <h4 style="margin: 0 0 10px; color: #1e293b; font-weight: 900;">Escolha a próxima engrenagem para encaixar:</h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px;">
+            <button class="cartoon-btn btn-blue" onclick="app.pickGear('A')">
+              ⚙️ Pequena (A)
+            </button>
+            <button class="cartoon-btn btn-purple" onclick="app.pickGear('B')">
+              ⚙️ Média (B)
+            </button>
+            <button class="cartoon-btn btn-orange" onclick="app.pickGear('C')">
+              ⚙️ Grande (C)
+            </button>
+          </div>
+          <div id="gear-feedback" style="margin-top: 14px; font-weight: 800; font-size: 0.95rem;"></div>
+        `;
+      },
+
+      pickGear(gear) {
+        if (this.missionState.gearSequence.length >= 3) return;
+        AudioEngine.playPop();
+        const idx = this.missionState.gearSequence.length;
+        this.missionState.gearSequence.push(gear);
+
+        const slot = document.getElementById(`gear-slot-${idx}`);
+        if (slot) {
+          slot.innerHTML = `<span style="font-size: 2.2rem;">⚙️</span><small style="font-weight:900;">${gear}</small>`;
+        }
+      },
+
+      clearGears() {
+        AudioEngine.playPop();
+        this.missionState.gearSequence = [];
+        for (let i = 0; i < 3; i++) {
+          const slot = document.getElementById(`gear-slot-${i}`);
+          if (slot) {
+            slot.innerHTML = `<span>${i + 1}º</span>`;
+            slot.classList.remove('gear-spinning');
+          }
+        }
+        document.getElementById('gear-feedback').innerHTML = '';
+      },
+
+      testGears() {
+        const seq = this.missionState.gearSequence.join('');
+        const feedback = document.getElementById('gear-feedback');
+
+        if (seq.length < 3) {
+          AudioEngine.playGentleBoing();
+          feedback.innerHTML = '<span style="color: #b91c1c;">Encaixe as 3 engrenagens nos espaços antes de ligar o motor!</span>';
+          return;
+        }
+
+        // Sequência correta: A -> B -> C
+        if (seq === 'ABC') {
+          AudioEngine.playFanfare();
+          for (let i = 0; i < 3; i++) {
+            const slot = document.getElementById(`gear-slot-${i}`);
+            slot.classList.add('gear-spinning');
+            if (i % 2 === 1) slot.classList.add('reverse');
+          }
+          feedback.innerHTML = '<span style="color: #15803d;">🎉 Sequência perfeita! Todas as engrenagens engataram e o trator funcionou!</span>';
+
+          setTimeout(() => {
+            this.completeMission(3, 2, 1);
+          }, 1600);
+        } else {
+          AudioEngine.playGentleBoing();
+          this.missionState.gearAttempts++;
+          document.getElementById('gear-attempts-label').textContent = `Tentativas: ${this.missionState.gearAttempts}/3`;
+
+          if (this.missionState.gearAttempts >= 3) {
+            feedback.innerHTML = '<span style="color: #c2410c;">💡 Dica da Lia: A sequência correta para encaixar os dentes é primeiro a <strong>Pequena (A)</strong>, depois a <strong>Média (B)</strong> e por fim a <strong>Grande (C)</strong>!</span>';
+          } else {
+            feedback.innerHTML = '<span style="color: #b91c1c;">Ops! Os dentes travaram. Tente outra ordem de engrenagens!</span>';
+          }
+        }
+      },
+
+      /* -------------------------------------------------------------
+         MISSÃO 4: ENERGIA PARA A CIDADE
+         ------------------------------------------------------------- */
+      setupMission4(container) {
+        this.missionState.energySelected = [];
+
+        container.innerHTML = `
+          <div style="background: linear-gradient(180deg, #1e3a8a, #0284c7); border-radius: 20px; padding: 24px; text-align: center; color: white; margin-bottom: 20px; border: 3px solid #ffffff;">
+            <div style="font-size: 3rem;" id="city-energy-icon">🏙️</div>
+            <h3 style="margin: 8px 0 4px; font-weight: 900;" id="city-energy-title">Iluminação da Cidade</h3>
+            <p style="margin: 0; font-size: 0.95rem; opacity: 0.9;">Escolha fontes limpas para alimentar a cidade sem fumaça!</p>
+          </div>
+
+          <h4 style="margin: 0 0 12px; font-weight: 900; color: #1e3a8a;">Escolha as fontes de energia que deseja ativar:</h4>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+            <div class="cartoon-card" style="padding: 16px; cursor: pointer;" onclick="app.toggleEnergy('solar', this)">
+              <div style="font-size: 2.2rem;">☀️</div>
+              <h4 style="margin: 6px 0; font-weight: 900; color: #b45309;">Energia Solar</h4>
+              <p style="margin: 0; font-size: 0.88rem; color: #475569;">Painéis captam a luz natural do Sol sem produzir nenhuma poluição!</p>
+            </div>
+            <div class="cartoon-card" style="padding: 16px; cursor: pointer;" onclick="app.toggleEnergy('wind', this)">
+              <div style="font-size: 2.2rem;">💨</div>
+              <h4 style="margin: 6px 0; font-weight: 900; color: #0284c7;">Energia Eólica</h4>
+              <p style="margin: 0; font-size: 0.88rem; color: #475569;">A força dos ventos sopra e gira turbinas gigantes gerando eletricidade limpa.</p>
+            </div>
+            <div class="cartoon-card" style="padding: 16px; cursor: pointer;" onclick="app.toggleEnergy('hydro', this)">
+              <div style="font-size: 2.2rem;">💧</div>
+              <h4 style="margin: 6px 0; font-weight: 900; color: #0369a1;">Energia Hidrelétrica</h4>
+              <p style="margin: 0; font-size: 0.88rem; color: #475569;">A correnteza natural da água faz girar geradores de força renovável.</p>
+            </div>
+            <div class="cartoon-card" style="padding: 16px; cursor: pointer;" onclick="app.toggleEnergy('coal', this)">
+              <div style="font-size: 2.2rem;">🪨</div>
+              <h4 style="margin: 6px 0; font-weight: 900; color: #334155;">Carvão Mineral</h4>
+              <p style="margin: 0; font-size: 0.88rem; color: #475569;">Queimar carvão solta fumaça escura que prejudica o ar e a saúde.</p>
+            </div>
+          </div>
+
+          <div style="margin-top: 20px; text-align: center;">
+            <button class="cartoon-btn btn-green" onclick="app.testEnergyCity()">
+              ⚡ Ligar a Rede Elétrica da Cidade!
+            </button>
+          </div>
+          <div id="energy-feedback" style="margin-top: 14px; font-weight: 800; font-size: 0.95rem; text-align: center;"></div>
+        `;
+      },
+
+      toggleEnergy(type, el) {
+        AudioEngine.playPop();
+        const list = this.missionState.energySelected;
+        const idx = list.indexOf(type);
+        if (idx >= 0) {
+          list.splice(idx, 1);
+          el.style.borderColor = '#ffffff';
+          el.style.background = 'var(--card-bg)';
+        } else {
+          list.push(type);
+          el.style.borderColor = '#ff9f1c';
+          el.style.background = '#fffbeb';
+        }
+      },
+
+      testEnergyCity() {
+        const sel = this.missionState.energySelected;
+        const feedback = document.getElementById('energy-feedback');
+        const icon = document.getElementById('city-energy-icon');
+
+        if (sel.length === 0) {
+          AudioEngine.playGentleBoing();
+          feedback.innerHTML = '<span style="color: #b91c1c;">Escolha ao menos uma fonte para gerar energia para a cidade!</span>';
+          return;
+        }
+
+        if (sel.includes('coal')) {
+          AudioEngine.playGentleBoing();
+          icon.textContent = '🏭';
+          feedback.innerHTML = '<span style="color: #b91c1c;">⚠️ O carvão soltou muita fumaça preta na cidade! Desmarque o carvão e use apenas as fontes renováveis (Solar, Eólica e Hidrelétrica).</span>';
+          return;
+        }
+
+        const renewables = ['solar', 'wind', 'hydro'];
+        const isAllRenewable = renewables.every(r => sel.includes(r));
+
+        if (isAllRenewable) {
+          AudioEngine.playFanfare();
+          icon.textContent = '✨🏙️✨';
+          feedback.innerHTML = '<span style="color: #15803d;">🎉 Sensacional! Você usou as 3 fontes renováveis! A cidade está brilhando e o ar continua puro! Bônus conquistado!</span>';
+          setTimeout(() => {
+            this.completeMission(4, 3, 2); // Bônus de 3 estrelas e 2 parafusos
+          }, 1500);
+        } else {
+          AudioEngine.playFanfare();
+          icon.textContent = '💡🏙️';
+          feedback.innerHTML = '<span style="color: #15803d;">Muito bem! Você usou energia limpa e renovável!</span>';
+          setTimeout(() => {
+            this.completeMission(4, 2, 1);
+          }, 1500);
+        }
+      },
+
+      /* -------------------------------------------------------------
+         MISSÃO 5: SALVE O RIO
+         ------------------------------------------------------------- */
+      setupMission5(container) {
+        this.missionState.riverCleaned = false;
+        this.missionState.riverTreated = false;
+
+        container.innerHTML = `
+          <div style="background: linear-gradient(180deg, #93c5fd, #2563eb); border-radius: 20px; padding: 26px; text-align: center; color: white; margin-bottom: 20px; border: 3px solid #ffffff; position: relative;">
+            <div style="font-size: 3.5rem;" id="river-visual">🌊 🚯 🐟</div>
+            <h3 style="margin: 8px 0 4px; font-weight: 900;" id="river-status-title">Rio em Recuperação</h3>
+            <p style="margin: 0; font-size: 0.95rem; opacity: 0.9;" id="river-status-desc">Ajude a equipe da Lia com as ações certas!</p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+            <button class="cartoon-btn btn-blue" onclick="app.doRiverAction('treat')">
+              🧪 Tratar a Água
+            </button>
+            <button class="cartoon-btn btn-green" onclick="app.doRiverAction('clean')">
+              🗑️ Recolher o Lixo
+            </button>
+            <button class="cartoon-btn" style="background: #ef4444; color: white;" onclick="app.doRiverAction('dump')">
+              💣 Jogar Mais Lixo
+            </button>
+          </div>
+          <div id="river-feedback" style="margin-top: 16px; font-weight: 800; font-size: 0.98rem; text-align: center;"></div>
+        `;
+      },
+
+      doRiverAction(action) {
+        const feedback = document.getElementById('river-feedback');
+        const visual = document.getElementById('river-visual');
+
+        if (action === 'dump') {
+          AudioEngine.playGentleBoing();
+          feedback.innerHTML = '<span style="color: #b91c1c;">🚫 Cuidado! Jogar lixo no rio polui as águas e machuca os peixes e tartarugas! Escolha atitudes corretas.</span>';
+          return;
+        }
+
+        AudioEngine.playPop();
+        if (action === 'treat') {
+          this.missionState.riverTreated = true;
+          feedback.innerHTML = '<span style="color: #1e3a8a;">🧪 Excelente! A estação de tratamento limpa as substâncias químicas da água!</span>';
+        } else if (action === 'clean') {
+          this.missionState.riverCleaned = true;
+          feedback.innerHTML = '<span style="color: #166534;">🗑️ Muito bem! Você retirou as garrafas e plásticos da água!</span>';
+        }
+
+        if (this.missionState.riverTreated && this.missionState.riverCleaned) {
+          AudioEngine.playFanfare();
+          visual.textContent = '✨🐬 🐟 🌿 🌊✨';
+          document.getElementById('river-status-title').textContent = 'Rio Cristalino e Saudável!';
+          document.getElementById('river-status-desc').textContent = 'A natureza agradece o trabalho da pequena engenheira!';
+          feedback.innerHTML = '<span style="color: #15803d;">🎉 Parabéns! Com tratamento e limpeza o rio está completamente salvo!</span>';
+
+          setTimeout(() => {
+            this.completeMission(5, 3, 1);
+          }, 1600);
+        }
+      },
+
+      /* -------------------------------------------------------------
+         MISSÃO 6: RECICLAGEM DIVERTIDA (Novo!)
+         ------------------------------------------------------------- */
+      setupMission6(container) {
+        this.missionState.selectedWaste = null;
+        this.missionState.sortedWastes = [];
+
+        const wastes = [
+          { id: 'can', label: 'Lata de Metal', icon: '🥫', bin: 'metal' },
+          { id: 'banana', label: 'Casca de Fruta', icon: '🍌', bin: 'organic' },
+          { id: 'news', label: 'Jornal Velho', icon: '📰', bin: 'paper' },
+          { id: 'bottle', label: 'Garrafa Pet', icon: '🧴', bin: 'plastic' }
+        ];
+
+        container.innerHTML = `
+          <h4 style="margin: 0 0 8px; color: #1e3a8a; font-weight: 900;">1. Toque em um item para segurar:</h4>
+          <div class="recycling-grid" id="waste-items-grid">
+            ${wastes.map(w => `
+              <div class="waste-item-card" id="waste-${w.id}" onclick="app.selectWasteItem('${w.id}', '${w.bin}')">
+                <div style="font-size: 2.6rem;">${w.icon}</div>
+                <div style="font-weight: 800; font-size: 0.88rem; color: #334155; margin-top: 4px;">${w.label}</div>
+              </div>
+            `).join('')}
+          </div>
+
+          <h4 style="margin: 16px 0 8px; color: #1e3a8a; font-weight: 900;">2. Toque na lixeira da cor certa:</h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px;">
+            <div class="bin-card bin-metal" onclick="app.dropWasteIntoBin('metal')">
+              <div style="font-size: 2.2rem;">♻️</div>
+              <div>Metais</div>
+              <small>Amarela</small>
+            </div>
+            <div class="bin-card bin-organic" onclick="app.dropWasteIntoBin('organic')">
+              <div style="font-size: 2.2rem;">🌱</div>
+              <div>Orgânico</div>
+              <small>Marrom</small>
+            </div>
+            <div class="bin-card bin-paper" onclick="app.dropWasteIntoBin('paper')">
+              <div style="font-size: 2.2rem;">♻️</div>
+              <div>Papel</div>
+              <small>Azul</small>
+            </div>
+            <div class="bin-card bin-plastic" onclick="app.dropWasteIntoBin('plastic')">
+              <div style="font-size: 2.2rem;">♻️</div>
+              <div>Plástico</div>
+              <small>Vermelha</small>
+            </div>
+          </div>
+          <div id="recycle-feedback" style="margin-top: 16px; font-weight: 800; font-size: 0.98rem; text-align: center;"></div>
+        `;
+      },
+
+      selectWasteItem(id, correctBin) {
+        if (this.missionState.sortedWastes.includes(id)) return;
+        AudioEngine.playPop();
+        this.missionState.selectedWaste = { id, correctBin };
+
+        document.querySelectorAll('.waste-item-card').forEach(el => el.classList.remove('selected'));
+        const target = document.getElementById(`waste-${id}`);
+        if (target) target.classList.add('selected');
+
+        document.getElementById('recycle-feedback').innerHTML = `<span style="color: #1e3a8a;">Item selecionado! Agora clique na lixeira certa para descartar.</span>`;
+      },
+
+      dropWasteIntoBin(binType) {
+        const item = this.missionState.selectedWaste;
+        const feedback = document.getElementById('recycle-feedback');
+
+        if (!item) {
+          AudioEngine.playGentleBoing();
+          feedback.innerHTML = '<span style="color: #b91c1c;">Primeiro selecione um dos itens acima antes de tocar na lixeira!</span>';
+          return;
+        }
+
+        if (item.correctBin === binType) {
+          AudioEngine.playPop();
+          this.missionState.sortedWastes.push(item.id);
+          const itemEl = document.getElementById(`waste-${item.id}`);
+          if (itemEl) {
+            itemEl.classList.remove('selected');
+            itemEl.classList.add('sorted');
+          }
+          this.missionState.selectedWaste = null;
+          feedback.innerHTML = '<span style="color: #15803d;">✨ Certo! Descarte realizado com sucesso!</span>';
+
+          if (this.missionState.sortedWastes.length === 4) {
+            AudioEngine.playFanfare();
+            feedback.innerHTML = '<span style="color: #15803d;">🎉 Todos os 4 materiais foram separados perfeitamente! Você é a heroína da reciclagem!</span>';
+            setTimeout(() => {
+              this.completeMission(6, 2, 1);
+            }, 1400);
+          }
+        } else {
+          AudioEngine.playGentleBoing();
+          let dica = "Metais vão na lixeira Amarela!";
+          if (item.correctBin === 'organic') dica = "Cascas e restos de comida vão na lixeira Orgânica (Marrom)!";
+          if (item.correctBin === 'paper') dica = "Papéis e jornais vão na lixeira Azul!";
+          if (item.correctBin === 'plastic') dica = "Garrafas e potes plásticos vão na lixeira Vermelha!";
+          feedback.innerHTML = `<span style="color: #c2410c;">Ops! Tente de novo. Dica: ${dica}</span>`;
+        }
+      },
+
+      /* -------------------------------------------------------------
+         MISSÃO 7: FOGUETE AO ESPAÇO (Novo!)
+         ------------------------------------------------------------- */
+      setupMission7(container) {
+        this.missionState.rocketStages = [];
+
+        container.innerHTML = `
+          <div class="rocket-assembly-zone">
+            <div class="rocket-stars-bg"></div>
+            <div class="rocket-pad" id="rocket-pad">
+              <div class="rocket-slot" id="rocket-stage-1">🚀 Ponta</div>
+              <div class="rocket-slot" id="rocket-stage-2">📦 Corpo</div>
+              <div class="rocket-slot" id="rocket-stage-3">🔥 Motor</div>
+            </div>
+          </div>
+
+          <div style="margin-top: 16px; text-align: center;">
+            <p style="font-weight: 800; color: #1e3a8a; margin: 0 0 10px;">Clique nas partes na ordem correta: <strong>1º Ponta ➔ 2º Corpo ➔ 3º Motor</strong></p>
+            <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
+              <button class="cartoon-btn btn-blue" onclick="app.clickRocketPart('ponta')">
+                🚀 1. Ponta Aerodinâmica
+              </button>
+              <button class="cartoon-btn btn-purple" onclick="app.clickRocketPart('corpo')">
+                📦 2. Corpo / Cabine
+              </button>
+              <button class="cartoon-btn btn-orange" onclick="app.clickRocketPart('motor')">
+                🔥 3. Motor Propulsor
+              </button>
+            </div>
+          </div>
+
+          <div id="rocket-feedback" style="margin-top: 14px; font-weight: 800; font-size: 0.98rem; text-align: center;"></div>
+        `;
+      },
+
+      clickRocketPart(part) {
+        const order = ['ponta', 'corpo', 'motor'];
+        const currentExpected = order[this.missionState.rocketStages.length];
+        const feedback = document.getElementById('rocket-feedback');
+
+        if (this.missionState.rocketStages.includes(part)) return;
+
+        if (part === currentExpected) {
+          AudioEngine.playPop();
+          this.missionState.rocketStages.push(part);
+          const stageIdx = this.missionState.rocketStages.length;
+          const slot = document.getElementById(`rocket-stage-${stageIdx}`);
+          if (slot) slot.classList.add('filled');
+
+          feedback.innerHTML = `<span style="color: #15803d;">Estágio montado com sucesso! (${stageIdx}/3)</span>`;
+
+          if (this.missionState.rocketStages.length === 3) {
+            AudioEngine.playLaunch();
+            feedback.innerHTML = '<span style="color: #15803d;">🚀 Tudo pronto! Contagem regressiva: 3... 2... 1... DECOLAR!</span>';
+            const pad = document.getElementById('rocket-pad');
+            if (pad) pad.classList.add('rocket-launching');
+
+            setTimeout(() => {
+              this.completeMission(7, 2, 1);
+            }, 2600);
+          }
+        } else {
+          AudioEngine.playGentleBoing();
+          let dica = "Primeiro posicione a Ponta Aerodinâmica!";
+          if (this.missionState.rocketStages.length === 1) dica = "Agora conecte o Corpo/Cabine no meio!";
+          if (this.missionState.rocketStages.length === 2) dica = "Por último instale o Motor Propulsor na base!";
+          feedback.innerHTML = `<span style="color: #c2410c;">Ordem incorreta! ${dica}</span>`;
+        }
+      },
+
+      /* -------------------------------------------------------------
+         MISSÃO 8: CIDADE INTELIGENTE (Novo!)
+         ------------------------------------------------------------- */
+      setupMission8(container) {
+        this.missionState.quizAnswers = [null, null, null];
+
+        container.innerHTML = `
+          <div class="quiz-card" id="quiz-q1">
+            <div class="quiz-question">1. O que deixa a cidade com o ar mais puro e menos congestionamentos?</div>
+            <div class="quiz-options">
+              <button class="quiz-opt-btn" onclick="app.answerQuiz(0, 0, true, this)">🚲 Usar bicicletas, ciclovias e ônibus elétricos</button>
+              <button class="quiz-opt-btn" onclick="app.answerQuiz(0, 1, false, this)">🚗 Fazer todo mundo andar só de carro sozinho</button>
+              <button class="quiz-opt-btn" onclick="app.answerQuiz(0, 2, false, this)">🔥 Fazer queimadas na beira da estrada</button>
+            </div>
+          </div>
+
+          <div class="quiz-card" id="quiz-q2">
+            <div class="quiz-question">2. Qual é a melhor atitude para economizar energia na escola e em casa?</div>
+            <div class="quiz-options">
+              <button class="quiz-opt-btn" onclick="app.answerQuiz(1, 0, true, this)">💡 Apagar as lâmpadas ao sair dos cômodos vazios</button>
+              <button class="quiz-opt-btn" onclick="app.answerQuiz(1, 1, false, this)">🌀 Deixar o ventilador ligado o dia todo sem ninguém no quarto</button>
+              <button class="quiz-opt-btn" onclick="app.answerQuiz(1, 2, false, this)">📺 Ligar 3 televisores ao mesmo tempo sem assistir</button>
+            </div>
+          </div>
+
+          <div class="quiz-card" id="quiz-q3">
+            <div class="quiz-question">3. O que a engenharia sustentável faz com a água da chuva dos telhados?</div>
+            <div class="quiz-options">
+              <button class="quiz-opt-btn" onclick="app.answerQuiz(2, 0, true, this)">💧 Coleta em cisternas para regar hortas e limpar calçadas</button>
+              <button class="quiz-opt-btn" onclick="app.answerQuiz(2, 1, false, this)">🚫 Deixa escorrer para o esgoto sem aproveitar</button>
+              <button class="quiz-opt-btn" onclick="app.answerQuiz(2, 2, false, this)">🛢️ Mistura com lixo e sabão</button>
+            </div>
+          </div>
+
+          <div id="quiz-feedback" style="margin-top: 16px; font-weight: 800; font-size: 0.98rem; text-align: center;"></div>
+        `;
+      },
+
+      answerQuiz(qIndex, optIndex, isCorrect, btnEl) {
+        const parent = btnEl.parentElement;
+        const feedback = document.getElementById('quiz-feedback');
+
+        if (isCorrect) {
+          AudioEngine.playPop();
+          parent.querySelectorAll('.quiz-opt-btn').forEach(b => b.classList.remove('correct', 'wrong'));
+          btnEl.classList.add('correct');
+          this.missionState.quizAnswers[qIndex] = true;
+
+          const allCorrect = this.missionState.quizAnswers.every(ans => ans === true);
+          if (allCorrect) {
+            AudioEngine.playFanfare();
+            feedback.innerHTML = '<span style="color: #15803d;">🎉 Excelente! Você acertou todas as 3 respostas e planejou uma Cidade Inteligente perfeita!</span>';
+            setTimeout(() => {
+              this.completeMission(8, 2, 1);
+            }, 1400);
+          } else {
+            feedback.innerHTML = `<span style="color: #15803d;">Resposta certa! Continue respondendo as outras perguntas!</span>`;
+          }
+        } else {
+          AudioEngine.playGentleBoing();
+          btnEl.classList.add('wrong');
+          feedback.innerHTML = '<span style="color: #c2410c;">Essa opção polui ou desperdiça recursos. Pense em uma alternativa mais sustentável!</span>';
+        }
+      },
+
+      /* -------------------------------------------------------------
+         LABORATÓRIO LIVRE
+         ------------------------------------------------------------- */
+      initLabPalette() {
+        const palette = document.getElementById('lab-palette');
+        if (!palette) return;
+        const emojis = ['🏠', '🚗', '🚀', '⚙️', '🌬️', '💧', '🧲', '🔋', '🤖', '🛠️'];
+
+        palette.innerHTML = emojis.map(em => `
+          <button class="lab-item-badge" onclick="app.addLabItem('${em}')" aria-label="Adicionar ${em}">
+            ${em}
+          </button>
+        `).join('');
+      },
+
+      addLabItem(emoji) {
+        if (this.missionState.labItems.length >= 8) return;
+        AudioEngine.playPop();
+        this.missionState.labItems.push(emoji);
+        this.renderLabBench();
+      },
+
+      clearLab() {
+        AudioEngine.playPop();
+        this.missionState.labItems = [];
+        this.renderLabBench();
+        const res = document.getElementById('lab-result-card');
+        if (res) res.style.display = 'none';
+      },
+
+      renderLabBench() {
+        const bench = document.getElementById('lab-workbench');
+        const count = document.getElementById('lab-count-indicator');
+        if (!bench) return;
+
+        count.textContent = `Peças na bancada: ${this.missionState.labItems.length}`;
+        if (this.missionState.labItems.length === 0) {
+          bench.innerHTML = '<span style="color: #94a3b8; font-weight: 700;">Toque nos itens acima para colocar na bancada!</span>';
+        } else {
+          bench.innerHTML = this.missionState.labItems.map((em, i) => `
+            <div class="lab-item-badge" onclick="app.removeLabItem(${i})" title="Toque para remover">${em}</div>
+          `).join('');
+        }
+      },
+
+      removeLabItem(idx) {
+        AudioEngine.playPop();
+        this.missionState.labItems.splice(idx, 1);
+        this.renderLabBench();
+      },
+
+      testLabInvention() {
+        const items = this.missionState.labItems;
+        const resCard = document.getElementById('lab-result-card');
+        const resTitle = document.getElementById('lab-result-title');
+        const resDesc = document.getElementById('lab-result-desc');
+
+        if (items.length < 3) {
+          AudioEngine.playGentleBoing();
+          alert('Coloque ao menos 3 peças na bancada para testar sua invenção!');
+          return;
+        }
+
+        AudioEngine.playFanfare();
+        this.state.stars += 1;
+        this.state.screws += 1;
+        this.state.labTestsCount++;
+
+        // Checa conquista do laboratório
+        if (this.state.labTestsCount >= 3 && !this.state.achievements.includes('inventor')) {
+          this.state.achievements.push('inventor');
+        }
+
+        this.saveState();
+        this.triggerConfetti();
+
+        const names = [
+          "Super Robô Aquático com Propulsão Magnética!",
+          "Carro Voador Solar que Limpa o Ar da Cidade!",
+          "Usina de Energia Eólica Automatizada com Hélice Dupla!",
+          "Foguete Explorador Movido a Bateria Quântica!",
+          "Casa Inteligente Ecológica com Coleta de Chuva!"
+        ];
+        const randomName = names[Math.floor(Math.random() * names.length)];
+
+        resTitle.textContent = `🎉 Invenção Criada: ${randomName}`;
+        resDesc.textContent = `Você combinou ${items.join(' ')} com pura criatividade de engenheira! Ganhou +1 ⭐ e +1 🔩! (Testes no laboratório: ${this.state.labTestsCount}/3)`;
+        resCard.style.display = 'block';
+      },
+
+      /* -------------------------------------------------------------
+         CONCLUSÃO DE MISSÃO E CELEBRAÇÃO
+         ------------------------------------------------------------- */
+      completeMission(mId, starsReward, screwsReward) {
+        const isFirstTime = !this.state.completedMissions.includes(mId);
+
+        if (isFirstTime) {
+          this.state.completedMissions.push(mId);
+          this.state.stars += starsReward;
+          this.state.screws += screwsReward;
+
+          // Desbloqueia conquista da missão
+          const achId = `m${mId}`;
+          if (!this.state.achievements.includes(achId)) {
+            this.state.achievements.push(achId);
+          }
+
+          // Checa se concluiu as 8 missões
+          if (this.state.completedMissions.length >= 8 && !this.state.achievements.includes('expert')) {
+            this.state.achievements.push('expert');
+          }
+
+          this.saveState();
+        }
+
+        this.triggerConfetti();
+        AudioEngine.playFanfare();
+
+        // Configura modal de celebração
+        document.getElementById('modal-title').textContent = `🎉 Missão ${mId} Concluída!`;
+        document.getElementById('modal-subtitle').textContent = isFirstTime
+          ? "Muito bem, engenheira! Você arrasou e aprendeu algo novo!"
+          : "Você repetiu a missão com maestria e perfeição!";
+        document.getElementById('modal-reward-stars').textContent = isFirstTime ? `+${starsReward} ⭐` : '0 ⭐ (Já concluída)';
+        document.getElementById('modal-reward-screws').textContent = isFirstTime ? `+${screwsReward} 🔩` : '0 🔩';
+        document.getElementById('modal-did-you-know').textContent = DID_YOU_KNOW[mId] || "A engenharia transforma ideias em soluções reais para o mundo!";
+
+        document.getElementById('celebration-modal').classList.add('open');
+      },
+
+      closeModalAndMap() {
+        document.getElementById('celebration-modal').classList.remove('open');
+        this.navigate('map');
+      },
+
+      triggerConfetti() {
+        const colors = ['#f43f5e', '#ec4899', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#fbbf24'];
+        for (let i = 0; i < 40; i++) {
+          const conf = document.createElement('div');
+          conf.className = 'confetti-piece';
+          conf.style.left = `${Math.random() * 100}vw`;
+          conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          conf.style.animationDuration = `${1.8 + Math.random() * 1.6}s`;
+          conf.style.width = `${8 + Math.random() * 8}px`;
+          conf.style.height = `${12 + Math.random() * 8}px`;
+          document.body.appendChild(conf);
+
+          setTimeout(() => {
+            conf.remove();
+          }, 3500);
+        }
+      },
+
+      /* -------------------------------------------------------------
+         CONQUISTAS & RESET
+         ------------------------------------------------------------- */
+      renderAchievements() {
+        const container = document.getElementById('achievements-container');
+        if (!container) return;
+
+        container.innerHTML = ACHIEVEMENTS_DATA.map(ach => {
+          const unlocked = this.state.achievements.includes(ach.id);
+          return `
+            <div class="achievement-card ${unlocked ? 'unlocked' : ''}">
+              <div class="achieve-icon">${unlocked ? ach.icon : '🔒'}</div>
+              <div>
+                <h4 style="margin: 0 0 4px; font-weight: 900; color: ${unlocked ? '#0b4f8a' : '#64748b'};">
+                  ${ach.title}
+                </h4>
+                <p style="margin: 0; font-size: 0.86rem; color: #64748b; line-height: 1.3;">
+                  ${ach.desc}
+                </p>
+                <small style="font-weight: 800; color: ${unlocked ? '#16a34a' : '#94a3b8'};">
+                  ${unlocked ? '🏆 Desbloqueada!' : '🔒 Bloqueada'}
+                </small>
+              </div>
+            </div>
+          `;
+        }).join('');
+      },
+
+      resetProgressConfirm() {
+        AudioEngine.playPop();
+        const conf = confirm("Tem certeza de que deseja reiniciar todo o progresso do jogo? Suas estrelas e troféus serão zerados.");
+        if (conf) {
+          localStorage.removeItem(this.storageKey);
+          this.state = {
+            stars: 0,
+            screws: 0,
+            completedMissions: [],
+            labTestsCount: 0,
+            achievements: [],
+            soundEnabled: true
+          };
+          this.saveState();
+          this.renderAchievements();
+          this.renderWorlds();
+          alert("Progresso reiniciado com sucesso! Vamos começar uma nova aventura!");
+          this.navigate('home');
+        }
+      }
+    };
+
+    // Inicialização ao carregar a página
+    document.addEventListener('DOMContentLoaded', () => {
+      app.init();
+    });
+  </script>
+</body>
+</html>
